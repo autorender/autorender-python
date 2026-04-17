@@ -102,21 +102,18 @@ class Autorender(SyncAPIClient):
 
     @cached_property
     def uploads(self) -> UploadsResource:
-        """Upload files to your workspace"""
         from .resources.uploads import UploadsResource
 
         return UploadsResource(self)
 
     @cached_property
     def files(self) -> FilesResource:
-        """Manage files in your workspace"""
         from .resources.files import FilesResource
 
         return FilesResource(self)
 
     @cached_property
     def folders(self) -> FoldersResource:
-        """Manage folder structure"""
         from .resources.folders import FoldersResource
 
         return FoldersResource(self)
@@ -298,21 +295,18 @@ class AsyncAutorender(AsyncAPIClient):
 
     @cached_property
     def uploads(self) -> AsyncUploadsResource:
-        """Upload files to your workspace"""
         from .resources.uploads import AsyncUploadsResource
 
         return AsyncUploadsResource(self)
 
     @cached_property
     def files(self) -> AsyncFilesResource:
-        """Manage files in your workspace"""
         from .resources.files import AsyncFilesResource
 
         return AsyncFilesResource(self)
 
     @cached_property
     def folders(self) -> AsyncFoldersResource:
-        """Manage folder structure"""
         from .resources.folders import AsyncFoldersResource
 
         return AsyncFoldersResource(self)
@@ -449,21 +443,18 @@ class AutorenderWithRawResponse:
 
     @cached_property
     def uploads(self) -> uploads.UploadsResourceWithRawResponse:
-        """Upload files to your workspace"""
         from .resources.uploads import UploadsResourceWithRawResponse
 
         return UploadsResourceWithRawResponse(self._client.uploads)
 
     @cached_property
     def files(self) -> files.FilesResourceWithRawResponse:
-        """Manage files in your workspace"""
         from .resources.files import FilesResourceWithRawResponse
 
         return FilesResourceWithRawResponse(self._client.files)
 
     @cached_property
     def folders(self) -> folders.FoldersResourceWithRawResponse:
-        """Manage folder structure"""
         from .resources.folders import FoldersResourceWithRawResponse
 
         return FoldersResourceWithRawResponse(self._client.folders)
@@ -477,21 +468,18 @@ class AsyncAutorenderWithRawResponse:
 
     @cached_property
     def uploads(self) -> uploads.AsyncUploadsResourceWithRawResponse:
-        """Upload files to your workspace"""
         from .resources.uploads import AsyncUploadsResourceWithRawResponse
 
         return AsyncUploadsResourceWithRawResponse(self._client.uploads)
 
     @cached_property
     def files(self) -> files.AsyncFilesResourceWithRawResponse:
-        """Manage files in your workspace"""
         from .resources.files import AsyncFilesResourceWithRawResponse
 
         return AsyncFilesResourceWithRawResponse(self._client.files)
 
     @cached_property
     def folders(self) -> folders.AsyncFoldersResourceWithRawResponse:
-        """Manage folder structure"""
         from .resources.folders import AsyncFoldersResourceWithRawResponse
 
         return AsyncFoldersResourceWithRawResponse(self._client.folders)
@@ -505,21 +493,18 @@ class AutorenderWithStreamedResponse:
 
     @cached_property
     def uploads(self) -> uploads.UploadsResourceWithStreamingResponse:
-        """Upload files to your workspace"""
         from .resources.uploads import UploadsResourceWithStreamingResponse
 
         return UploadsResourceWithStreamingResponse(self._client.uploads)
 
     @cached_property
     def files(self) -> files.FilesResourceWithStreamingResponse:
-        """Manage files in your workspace"""
         from .resources.files import FilesResourceWithStreamingResponse
 
         return FilesResourceWithStreamingResponse(self._client.files)
 
     @cached_property
     def folders(self) -> folders.FoldersResourceWithStreamingResponse:
-        """Manage folder structure"""
         from .resources.folders import FoldersResourceWithStreamingResponse
 
         return FoldersResourceWithStreamingResponse(self._client.folders)
@@ -533,21 +518,18 @@ class AsyncAutorenderWithStreamedResponse:
 
     @cached_property
     def uploads(self) -> uploads.AsyncUploadsResourceWithStreamingResponse:
-        """Upload files to your workspace"""
         from .resources.uploads import AsyncUploadsResourceWithStreamingResponse
 
         return AsyncUploadsResourceWithStreamingResponse(self._client.uploads)
 
     @cached_property
     def files(self) -> files.AsyncFilesResourceWithStreamingResponse:
-        """Manage files in your workspace"""
         from .resources.files import AsyncFilesResourceWithStreamingResponse
 
         return AsyncFilesResourceWithStreamingResponse(self._client.files)
 
     @cached_property
     def folders(self) -> folders.AsyncFoldersResourceWithStreamingResponse:
-        """Manage folder structure"""
         from .resources.folders import AsyncFoldersResourceWithStreamingResponse
 
         return AsyncFoldersResourceWithStreamingResponse(self._client.folders)

@@ -17,6 +17,8 @@ class Folder(BaseModel):
 
     created_at: Optional[datetime] = None
 
+    created_by: Optional[str] = None
+
     folder_no: Optional[str] = None
 
     is_active: Optional[bool] = None
@@ -28,6 +30,8 @@ class Folder(BaseModel):
     parent_folder: Optional[str] = None
 
     path: Optional[str] = None
+
+    source: Optional[str] = None
 
     updated_at: Optional[datetime] = None
 

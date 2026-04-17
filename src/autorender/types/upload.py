@@ -10,3 +10,4 @@ class Upload(BaseModel):
     data: UploadData
 
     success: bool
+    """Indicates if the upload was successful"""

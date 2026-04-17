@@ -9,4 +9,4 @@ __all__ = ["FolderListParams"]
 
 class FolderListParams(TypedDict, total=False):
     parent_folder_no: str
-    """Return only direct children of this folder"""
+    """Only return direct children of this folder (folder number)"""

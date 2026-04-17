@@ -33,7 +33,7 @@ class Data(BaseModel):
 
     file_no: Optional[str] = None
 
-    folder: Optional[str] = None
+    folder: Optional[object] = None
 
     format: Optional[str] = None
 
@@ -42,6 +42,7 @@ class Data(BaseModel):
     path: Optional[str] = None
 
     size: Optional[int] = None
+    """File size in bytes"""
 
     uploaded_at: Optional[datetime] = None
 

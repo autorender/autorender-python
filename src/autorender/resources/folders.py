@@ -25,8 +25,6 @@ __all__ = ["FoldersResource", "AsyncFoldersResource"]
 
 
 class FoldersResource(SyncAPIResource):
-    """Manage folder structure"""
-
     @cached_property
     def with_raw_response(self) -> FoldersResourceWithRawResponse:
         """
@@ -58,15 +56,13 @@ class FoldersResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FolderCreateResponse:
-        """Create a new folder.
-
-        Optionally nest it under an existing folder by providing
-        parent_folder_no.
+        """
+        Create a folder under an optional parent.
 
         Args:
           name: Folder display name
 
-          parent_folder_no: Parent folder number; omit for root level
+          parent_folder_no: Parent folder number; omit or null for root
 
           extra_headers: Send extra headers
 
@@ -102,12 +98,13 @@ class FoldersResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FolderListResponse:
-        """List folders in the workspace.
+        """List folders under an optional parent.
 
-        Omit parent_folder_no to list root-level folders.
+        Omit `parent_folder_no` to list
+        root-level folders.
 
         Args:
-          parent_folder_no: Return only direct children of this folder
+          parent_folder_no: Only return direct children of this folder (folder number)
 
           extra_headers: Send extra headers
 
@@ -140,8 +137,9 @@ class FoldersResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FolderDeleteResponse:
-        """
-        Delete a folder by its folder number.
+        """Delete a folder by folder number.
+
+        No request body required.
 
         Args:
           extra_headers: Send extra headers
@@ -175,11 +173,9 @@ class FoldersResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Folder:
         """
-        Rename a folder by its folder number.
+        Rename a folder by `folder_no`.
 
         Args:
-          name: New folder name
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -201,8 +197,6 @@ class FoldersResource(SyncAPIResource):
 
 
 class AsyncFoldersResource(AsyncAPIResource):
-    """Manage folder structure"""
-
     @cached_property
     def with_raw_response(self) -> AsyncFoldersResourceWithRawResponse:
         """
@@ -234,15 +228,13 @@ class AsyncFoldersResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FolderCreateResponse:
-        """Create a new folder.
-
-        Optionally nest it under an existing folder by providing
-        parent_folder_no.
+        """
+        Create a folder under an optional parent.
 
         Args:
           name: Folder display name
 
-          parent_folder_no: Parent folder number; omit for root level
+          parent_folder_no: Parent folder number; omit or null for root
 
           extra_headers: Send extra headers
 
@@ -278,12 +270,13 @@ class AsyncFoldersResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FolderListResponse:
-        """List folders in the workspace.
+        """List folders under an optional parent.
 
-        Omit parent_folder_no to list root-level folders.
+        Omit `parent_folder_no` to list
+        root-level folders.
 
         Args:
-          parent_folder_no: Return only direct children of this folder
+          parent_folder_no: Only return direct children of this folder (folder number)
 
           extra_headers: Send extra headers
 
@@ -318,8 +311,9 @@ class AsyncFoldersResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FolderDeleteResponse:
-        """
-        Delete a folder by its folder number.
+        """Delete a folder by folder number.
+
+        No request body required.
 
         Args:
           extra_headers: Send extra headers
@@ -353,11 +347,9 @@ class AsyncFoldersResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Folder:
         """
-        Rename a folder by its folder number.
+        Rename a folder by `folder_no`.
 
         Args:
-          name: New folder name
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
