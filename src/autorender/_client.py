@@ -35,7 +35,7 @@ if TYPE_CHECKING:
     from .resources import files, folders, uploads
     from .resources.files import FilesResource, AsyncFilesResource
     from .resources.folders import FoldersResource, AsyncFoldersResource
-    from .resources.uploads.uploads import UploadsResource, AsyncUploadsResource
+    from .resources.uploads import UploadsResource, AsyncUploadsResource
 
 __all__ = [
     "Timeout",
