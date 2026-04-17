@@ -9,6 +9,7 @@ from autorender.types import Upload, UploadData
 Methods:
 
 - <code title="post /api/v1/uploads">client.uploads.<a href="./src/autorender/resources/uploads.py">create</a>(\*\*<a href="src/autorender/types/upload_create_params.py">params</a>) -> <a href="./src/autorender/types/upload.py">Upload</a></code>
+- <code title="post /api/v1/uploads/remote">client.uploads.<a href="./src/autorender/resources/uploads.py">create_from_url</a>(\*\*<a href="src/autorender/types/upload_create_from_url_params.py">params</a>) -> <a href="./src/autorender/types/upload.py">Upload</a></code>
 
 # Files
 
