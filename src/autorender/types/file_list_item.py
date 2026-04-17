@@ -25,7 +25,7 @@ class FileListItem(BaseModel):
 
     path: Optional[str] = None
 
-    thumbanil: Optional[str] = None
+    thumbnail: Optional[str] = None
     """Thumbnail CDN URL"""
 
     url: Optional[str] = None
