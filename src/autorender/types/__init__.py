@@ -20,3 +20,4 @@ from .folder_rename_params import FolderRenameParams as FolderRenameParams
 from .upload_create_params import UploadCreateParams as UploadCreateParams
 from .folder_create_response import FolderCreateResponse as FolderCreateResponse
 from .folder_delete_response import FolderDeleteResponse as FolderDeleteResponse
+from .upload_create_from_url_params import UploadCreateFromURLParams as UploadCreateFromURLParams

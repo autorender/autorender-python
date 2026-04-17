@@ -6,7 +6,7 @@ from typing import Mapping, cast
 
 import httpx
 
-from ..types import upload_create_params
+from ..types import upload_create_params, upload_create_from_url_params
 from .._types import Body, Omit, Query, Headers, NotGiven, FileTypes, omit, not_given
 from .._utils import extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
 from .._compat import cached_property
@@ -117,6 +117,73 @@ class UploadsResource(SyncAPIResource):
             cast_to=Upload,
         )
 
+    def create_from_url(
+        self,
+        *,
+        remote_url: str,
+        custom_id: str | Omit = omit,
+        folder: str | Omit = omit,
+        metadata: str | Omit = omit,
+        random_prefix: str | Omit = omit,
+        tags: str | Omit = omit,
+        transform: str | Omit = omit,
+        webhook_url: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Upload:
+        """
+        Fetch a file from a remote URL and store it in your AutoRender workspace.
+
+        Args:
+          remote_url: The HTTP or HTTPS URL of the image to download
+
+          custom_id: Custom identifier for tracking the upload
+
+          folder: Folder path where the file should be stored
+
+          metadata: JSON string containing custom metadata object
+
+          random_prefix: Set to 'true' to generate a random suffix for the filename
+
+          tags: Comma-separated list of tags to apply to the file
+
+          transform: Transformation string to apply during upload (e.g., w_800,h_600,c_crop)
+
+          webhook_url: URL to receive webhook notification when upload completes
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._post(
+            "/api/v1/uploads/remote",
+            body=maybe_transform(
+                {
+                    "remote_url": remote_url,
+                    "custom_id": custom_id,
+                    "folder": folder,
+                    "metadata": metadata,
+                    "random_prefix": random_prefix,
+                    "tags": tags,
+                    "transform": transform,
+                    "webhook_url": webhook_url,
+                },
+                upload_create_from_url_params.UploadCreateFromURLParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Upload,
+        )
+
 
 class AsyncUploadsResource(AsyncAPIResource):
     @cached_property
@@ -212,6 +279,73 @@ class AsyncUploadsResource(AsyncAPIResource):
             cast_to=Upload,
         )
 
+    async def create_from_url(
+        self,
+        *,
+        remote_url: str,
+        custom_id: str | Omit = omit,
+        folder: str | Omit = omit,
+        metadata: str | Omit = omit,
+        random_prefix: str | Omit = omit,
+        tags: str | Omit = omit,
+        transform: str | Omit = omit,
+        webhook_url: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Upload:
+        """
+        Fetch a file from a remote URL and store it in your AutoRender workspace.
+
+        Args:
+          remote_url: The HTTP or HTTPS URL of the image to download
+
+          custom_id: Custom identifier for tracking the upload
+
+          folder: Folder path where the file should be stored
+
+          metadata: JSON string containing custom metadata object
+
+          random_prefix: Set to 'true' to generate a random suffix for the filename
+
+          tags: Comma-separated list of tags to apply to the file
+
+          transform: Transformation string to apply during upload (e.g., w_800,h_600,c_crop)
+
+          webhook_url: URL to receive webhook notification when upload completes
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._post(
+            "/api/v1/uploads/remote",
+            body=await async_maybe_transform(
+                {
+                    "remote_url": remote_url,
+                    "custom_id": custom_id,
+                    "folder": folder,
+                    "metadata": metadata,
+                    "random_prefix": random_prefix,
+                    "tags": tags,
+                    "transform": transform,
+                    "webhook_url": webhook_url,
+                },
+                upload_create_from_url_params.UploadCreateFromURLParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Upload,
+        )
+
 
 class UploadsResourceWithRawResponse:
     def __init__(self, uploads: UploadsResource) -> None:
@@ -219,6 +353,9 @@ class UploadsResourceWithRawResponse:
 
         self.create = to_raw_response_wrapper(
             uploads.create,
+        )
+        self.create_from_url = to_raw_response_wrapper(
+            uploads.create_from_url,
         )
 
 
@@ -229,6 +366,9 @@ class AsyncUploadsResourceWithRawResponse:
         self.create = async_to_raw_response_wrapper(
             uploads.create,
         )
+        self.create_from_url = async_to_raw_response_wrapper(
+            uploads.create_from_url,
+        )
 
 
 class UploadsResourceWithStreamingResponse:
@@ -238,6 +378,9 @@ class UploadsResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             uploads.create,
         )
+        self.create_from_url = to_streamed_response_wrapper(
+            uploads.create_from_url,
+        )
 
 
 class AsyncUploadsResourceWithStreamingResponse:
@@ -246,4 +389,7 @@ class AsyncUploadsResourceWithStreamingResponse:
 
         self.create = async_to_streamed_response_wrapper(
             uploads.create,
+        )
+        self.create_from_url = async_to_streamed_response_wrapper(
+            uploads.create_from_url,
         )

@@ -65,6 +65,51 @@ class TestUploads:
 
         assert cast(Any, response.is_closed) is True
 
+    @parametrize
+    def test_method_create_from_url(self, client: Autorender) -> None:
+        upload = client.uploads.create_from_url(
+            remote_url="remote_url",
+        )
+        assert_matches_type(Upload, upload, path=["response"])
+
+    @parametrize
+    def test_method_create_from_url_with_all_params(self, client: Autorender) -> None:
+        upload = client.uploads.create_from_url(
+            remote_url="remote_url",
+            custom_id="custom_id",
+            folder="folder",
+            metadata="metadata",
+            random_prefix="random_prefix",
+            tags="tags",
+            transform="transform",
+            webhook_url="webhook_url",
+        )
+        assert_matches_type(Upload, upload, path=["response"])
+
+    @parametrize
+    def test_raw_response_create_from_url(self, client: Autorender) -> None:
+        response = client.uploads.with_raw_response.create_from_url(
+            remote_url="remote_url",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        upload = response.parse()
+        assert_matches_type(Upload, upload, path=["response"])
+
+    @parametrize
+    def test_streaming_response_create_from_url(self, client: Autorender) -> None:
+        with client.uploads.with_streaming_response.create_from_url(
+            remote_url="remote_url",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            upload = response.parse()
+            assert_matches_type(Upload, upload, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
 
 class TestAsyncUploads:
     parametrize = pytest.mark.parametrize(
@@ -110,6 +155,51 @@ class TestAsyncUploads:
         async with async_client.uploads.with_streaming_response.create(
             file=b"Example data",
             file_name="file_name",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            upload = await response.parse()
+            assert_matches_type(Upload, upload, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_method_create_from_url(self, async_client: AsyncAutorender) -> None:
+        upload = await async_client.uploads.create_from_url(
+            remote_url="remote_url",
+        )
+        assert_matches_type(Upload, upload, path=["response"])
+
+    @parametrize
+    async def test_method_create_from_url_with_all_params(self, async_client: AsyncAutorender) -> None:
+        upload = await async_client.uploads.create_from_url(
+            remote_url="remote_url",
+            custom_id="custom_id",
+            folder="folder",
+            metadata="metadata",
+            random_prefix="random_prefix",
+            tags="tags",
+            transform="transform",
+            webhook_url="webhook_url",
+        )
+        assert_matches_type(Upload, upload, path=["response"])
+
+    @parametrize
+    async def test_raw_response_create_from_url(self, async_client: AsyncAutorender) -> None:
+        response = await async_client.uploads.with_raw_response.create_from_url(
+            remote_url="remote_url",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        upload = await response.parse()
+        assert_matches_type(Upload, upload, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_create_from_url(self, async_client: AsyncAutorender) -> None:
+        async with async_client.uploads.with_streaming_response.create_from_url(
+            remote_url="remote_url",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
