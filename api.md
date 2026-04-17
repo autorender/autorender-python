@@ -8,24 +8,10 @@ from autorender.types import Upload, UploadData, UploadGenerateTokenResponse
 
 Methods:
 
-- <code title="post /api/v1/uploads">client.uploads.<a href="./src/autorender/resources/uploads/uploads.py">create</a>(\*\*<a href="src/autorender/types/upload_create_params.py">params</a>) -> <a href="./src/autorender/types/upload.py">Upload</a></code>
-- <code title="post /api/v1/uploads/remote">client.uploads.<a href="./src/autorender/resources/uploads/uploads.py">create_from_url</a>(\*\*<a href="src/autorender/types/upload_create_from_url_params.py">params</a>) -> <a href="./src/autorender/types/upload.py">Upload</a></code>
-- <code title="post /api/v1/uploads/{token}">client.uploads.<a href="./src/autorender/resources/uploads/uploads.py">create_with_token</a>(token, body, \*\*<a href="src/autorender/types/upload_create_with_token_params.py">params</a>) -> <a href="./src/autorender/types/upload.py">Upload</a></code>
-- <code title="post /api/v1/generate-token">client.uploads.<a href="./src/autorender/resources/uploads/uploads.py">generate_token</a>(\*\*<a href="src/autorender/types/upload_generate_token_params.py">params</a>) -> <a href="./src/autorender/types/upload_generate_token_response.py">UploadGenerateTokenResponse</a></code>
-
-## Multipart
-
-Types:
-
-```python
-from autorender.types.uploads import Session
-```
-
-Methods:
-
-- <code title="post /api/v1/multipart/complete">client.uploads.multipart.<a href="./src/autorender/resources/uploads/multipart.py">complete</a>(\*\*<a href="src/autorender/types/uploads/multipart_complete_params.py">params</a>) -> <a href="./src/autorender/types/upload.py">Upload</a></code>
-- <code title="post /api/v1/multipart/start">client.uploads.multipart.<a href="./src/autorender/resources/uploads/multipart.py">start</a>(\*\*<a href="src/autorender/types/uploads/multipart_start_params.py">params</a>) -> <a href="./src/autorender/types/uploads/session.py">Session</a></code>
-- <code title="put /api/v1/multipart/parts">client.uploads.multipart.<a href="./src/autorender/resources/uploads/multipart.py">upload_part</a>(body, \*\*<a href="src/autorender/types/uploads/multipart_upload_part_params.py">params</a>) -> None</code>
+- <code title="post /api/v1/uploads">client.uploads.<a href="./src/autorender/resources/uploads.py">create</a>(\*\*<a href="src/autorender/types/upload_create_params.py">params</a>) -> <a href="./src/autorender/types/upload.py">Upload</a></code>
+- <code title="post /api/v1/uploads/remote">client.uploads.<a href="./src/autorender/resources/uploads.py">create_from_url</a>(\*\*<a href="src/autorender/types/upload_create_from_url_params.py">params</a>) -> <a href="./src/autorender/types/upload.py">Upload</a></code>
+- <code title="post /api/v1/uploads/{token}">client.uploads.<a href="./src/autorender/resources/uploads.py">create_with_token</a>(token, body, \*\*<a href="src/autorender/types/upload_create_with_token_params.py">params</a>) -> <a href="./src/autorender/types/upload.py">Upload</a></code>
+- <code title="post /api/v1/generate-token">client.uploads.<a href="./src/autorender/resources/uploads.py">generate_token</a>(\*\*<a href="src/autorender/types/upload_generate_token_params.py">params</a>) -> <a href="./src/autorender/types/upload_generate_token_response.py">UploadGenerateTokenResponse</a></code>
 
 # Files
 

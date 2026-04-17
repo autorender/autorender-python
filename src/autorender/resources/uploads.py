@@ -7,13 +7,13 @@ from typing import Dict, Mapping, cast
 
 import httpx
 
-from ...types import (
+from ..types import (
     upload_create_params,
     upload_generate_token_params,
     upload_create_from_url_params,
 )
-from ..._files import read_file_content, async_read_file_content
-from ..._types import (
+from .._files import read_file_content, async_read_file_content
+from .._types import (
     Body,
     Omit,
     Query,
@@ -27,37 +27,24 @@ from ..._types import (
     omit,
     not_given,
 )
-from ..._utils import extract_files, path_template, maybe_transform, deepcopy_minimal, async_maybe_transform
-from ..._compat import cached_property
-from .multipart import (
-    MultipartResource,
-    AsyncMultipartResource,
-    MultipartResourceWithRawResponse,
-    AsyncMultipartResourceWithRawResponse,
-    MultipartResourceWithStreamingResponse,
-    AsyncMultipartResourceWithStreamingResponse,
-)
-from ..._resource import SyncAPIResource, AsyncAPIResource
-from ..._response import (
+from .._utils import extract_files, path_template, maybe_transform, deepcopy_minimal, async_maybe_transform
+from .._compat import cached_property
+from .._resource import SyncAPIResource, AsyncAPIResource
+from .._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..._base_client import make_request_options
-from ...types.upload import Upload
-from ...types.upload_generate_token_response import UploadGenerateTokenResponse
+from .._base_client import make_request_options
+from ..types.upload import Upload
+from ..types.upload_generate_token_response import UploadGenerateTokenResponse
 
 __all__ = ["UploadsResource", "AsyncUploadsResource"]
 
 
 class UploadsResource(SyncAPIResource):
     """Upload files to your workspace"""
-
-    @cached_property
-    def multipart(self) -> MultipartResource:
-        """Large file uploads via multipart"""
-        return MultipartResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> UploadsResourceWithRawResponse:
@@ -349,11 +336,6 @@ class UploadsResource(SyncAPIResource):
 
 class AsyncUploadsResource(AsyncAPIResource):
     """Upload files to your workspace"""
-
-    @cached_property
-    def multipart(self) -> AsyncMultipartResource:
-        """Large file uploads via multipart"""
-        return AsyncMultipartResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncUploadsResourceWithRawResponse:
@@ -660,11 +642,6 @@ class UploadsResourceWithRawResponse:
             uploads.generate_token,
         )
 
-    @cached_property
-    def multipart(self) -> MultipartResourceWithRawResponse:
-        """Large file uploads via multipart"""
-        return MultipartResourceWithRawResponse(self._uploads.multipart)
-
 
 class AsyncUploadsResourceWithRawResponse:
     def __init__(self, uploads: AsyncUploadsResource) -> None:
@@ -682,11 +659,6 @@ class AsyncUploadsResourceWithRawResponse:
         self.generate_token = async_to_raw_response_wrapper(
             uploads.generate_token,
         )
-
-    @cached_property
-    def multipart(self) -> AsyncMultipartResourceWithRawResponse:
-        """Large file uploads via multipart"""
-        return AsyncMultipartResourceWithRawResponse(self._uploads.multipart)
 
 
 class UploadsResourceWithStreamingResponse:
@@ -706,11 +678,6 @@ class UploadsResourceWithStreamingResponse:
             uploads.generate_token,
         )
 
-    @cached_property
-    def multipart(self) -> MultipartResourceWithStreamingResponse:
-        """Large file uploads via multipart"""
-        return MultipartResourceWithStreamingResponse(self._uploads.multipart)
-
 
 class AsyncUploadsResourceWithStreamingResponse:
     def __init__(self, uploads: AsyncUploadsResource) -> None:
@@ -728,8 +695,3 @@ class AsyncUploadsResourceWithStreamingResponse:
         self.generate_token = async_to_streamed_response_wrapper(
             uploads.generate_token,
         )
-
-    @cached_property
-    def multipart(self) -> AsyncMultipartResourceWithStreamingResponse:
-        """Large file uploads via multipart"""
-        return AsyncMultipartResourceWithStreamingResponse(self._uploads.multipart)
