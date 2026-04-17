@@ -15,25 +15,25 @@ class UploadData(BaseModel):
     """10-character file number identifier"""
 
     file_size: Optional[int] = None
-    """File size in bytes"""
+    """File size in bytes (after processing)"""
 
     format: Optional[str] = None
-    """File format (e.g., jpeg, png, mp4)"""
+    """File format/extension (e.g., jpg, png, webp)"""
 
     height: Optional[int] = None
-    """Image height in pixels"""
+    """Image height in pixels (null for non-image files)"""
 
     name: Optional[str] = None
-    """Final filename"""
+    """Final filename (may include random suffix if requested)"""
 
     path: Optional[str] = None
     """Folder path where the file is stored"""
 
     url: Optional[str] = None
-    """CDN URL to access the file"""
+    """Full CDN URL to access the uploaded file"""
 
     width: Optional[int] = None
-    """Image width in pixels"""
+    """Image width in pixels (null for non-image files)"""
 
     workspace_no: Optional[str] = None
     """Workspace identifier"""

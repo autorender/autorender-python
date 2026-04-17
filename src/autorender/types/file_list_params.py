@@ -9,19 +9,19 @@ __all__ = ["FileListParams"]
 
 class FileListParams(TypedDict, total=False):
     folder_no: str
-    """Filter to files in this folder"""
+    """Restrict results to files in this folder (folder number)"""
 
     limit: int
     """Items per page"""
 
     name: str
-    """Partial filename match (case-insensitive)"""
+    """Filter by filename (partial match, if supported)"""
 
     page: int
     """Page number (1-based)"""
 
     path: str
-    """Filter by path prefix (e.g., products/sku123/)"""
+    """Filter by path prefix (if supported)"""
 
     sort_field: Literal["file_size", "name", "created_at", "updated_at"]
     """Field to sort by"""
@@ -30,4 +30,4 @@ class FileListParams(TypedDict, total=False):
     """Sort direction"""
 
     tags: str
-    """Comma-separated tags to filter by"""
+    """Comma-separated tags (if supported)"""

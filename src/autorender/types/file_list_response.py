@@ -20,6 +20,7 @@ class Meta(BaseModel):
     page: int
 
     total: int
+    """Total matching files"""
 
 
 class FileListResponse(BaseModel):

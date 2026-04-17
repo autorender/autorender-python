@@ -3,15 +3,12 @@
 Types:
 
 ```python
-from autorender.types import Upload, UploadData, UploadGenerateTokenResponse
+from autorender.types import Upload, UploadData
 ```
 
 Methods:
 
 - <code title="post /api/v1/uploads">client.uploads.<a href="./src/autorender/resources/uploads.py">create</a>(\*\*<a href="src/autorender/types/upload_create_params.py">params</a>) -> <a href="./src/autorender/types/upload.py">Upload</a></code>
-- <code title="post /api/v1/uploads/remote">client.uploads.<a href="./src/autorender/resources/uploads.py">create_from_url</a>(\*\*<a href="src/autorender/types/upload_create_from_url_params.py">params</a>) -> <a href="./src/autorender/types/upload.py">Upload</a></code>
-- <code title="post /api/v1/uploads/{token}">client.uploads.<a href="./src/autorender/resources/uploads.py">create_with_token</a>(token, body, \*\*<a href="src/autorender/types/upload_create_with_token_params.py">params</a>) -> <a href="./src/autorender/types/upload.py">Upload</a></code>
-- <code title="post /api/v1/generate-token">client.uploads.<a href="./src/autorender/resources/uploads.py">generate_token</a>(\*\*<a href="src/autorender/types/upload_generate_token_params.py">params</a>) -> <a href="./src/autorender/types/upload_generate_token_response.py">UploadGenerateTokenResponse</a></code>
 
 # Files
 
@@ -21,7 +18,6 @@ Types:
 from autorender.types import (
     FileListItem,
     FileObject,
-    FileUpdateResponse,
     FileListResponse,
     FileDeleteResponse,
     FileRenameResponse,
@@ -31,7 +27,6 @@ from autorender.types import (
 Methods:
 
 - <code title="get /api/v1/files/{fileNo}">client.files.<a href="./src/autorender/resources/files.py">retrieve</a>(file_no) -> <a href="./src/autorender/types/file_object.py">FileObject</a></code>
-- <code title="patch /api/v1/files/{fileNo}">client.files.<a href="./src/autorender/resources/files.py">update</a>(file_no, \*\*<a href="src/autorender/types/file_update_params.py">params</a>) -> <a href="./src/autorender/types/file_update_response.py">FileUpdateResponse</a></code>
 - <code title="get /api/v1/files">client.files.<a href="./src/autorender/resources/files.py">list</a>(\*\*<a href="src/autorender/types/file_list_params.py">params</a>) -> <a href="./src/autorender/types/file_list_response.py">FileListResponse</a></code>
 - <code title="delete /api/v1/files/{fileNo}">client.files.<a href="./src/autorender/resources/files.py">delete</a>(file_no) -> <a href="./src/autorender/types/file_delete_response.py">FileDeleteResponse</a></code>
 - <code title="patch /api/v1/files/{fileNo}/rename">client.files.<a href="./src/autorender/resources/files.py">rename</a>(file_no, \*\*<a href="src/autorender/types/file_rename_params.py">params</a>) -> <a href="./src/autorender/types/file_rename_response.py">FileRenameResponse</a></code>

@@ -20,19 +20,16 @@ class UploadCreateParams(TypedDict, total=False):
     """Custom identifier for the file"""
 
     folder: str
-    """Folder path where the file will be stored (e.g., products/sku123)"""
+    """Folder path where the file will be stored (e.g., uploads/my-folder)"""
 
     metadata: str
-    """JSON string for custom metadata (e.g., {"productId": "123"})"""
+    """JSON string for custom metadata (e.g., {"key": "value"})"""
 
     random_prefix: str
-    """Set to "true" to add a random suffix to the filename"""
+    """Set to "true" to add a random suffix to filename"""
 
     tags: str
-    """Comma-separated tags (e.g., product,thumbnail)"""
+    """Comma-separated tags (e.g., tag1,tag2,tag3)"""
 
     transform: str
     """Image transformation string (e.g., w_800,h_600,q_90)"""
-
-    webhook_url: str
-    """URL to receive a webhook notification when the upload completes"""

@@ -12,4 +12,4 @@ class FolderCreateParams(TypedDict, total=False):
     """Folder display name"""
 
     parent_folder_no: str
-    """Parent folder number; omit for root level"""
+    """Parent folder number; omit or null for root"""

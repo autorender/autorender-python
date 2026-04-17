@@ -25,22 +25,22 @@ class TestFolders:
     @parametrize
     def test_method_create(self, client: Autorender) -> None:
         folder = client.folders.create(
-            name="name",
+            name="demo2",
         )
         assert_matches_type(FolderCreateResponse, folder, path=["response"])
 
     @parametrize
     def test_method_create_with_all_params(self, client: Autorender) -> None:
         folder = client.folders.create(
-            name="name",
-            parent_folder_no="parent_folder_no",
+            name="demo2",
+            parent_folder_no="sD1LvqoDzG",
         )
         assert_matches_type(FolderCreateResponse, folder, path=["response"])
 
     @parametrize
     def test_raw_response_create(self, client: Autorender) -> None:
         response = client.folders.with_raw_response.create(
-            name="name",
+            name="demo2",
         )
 
         assert response.is_closed is True
@@ -51,7 +51,7 @@ class TestFolders:
     @parametrize
     def test_streaming_response_create(self, client: Autorender) -> None:
         with client.folders.with_streaming_response.create(
-            name="name",
+            name="demo2",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -135,7 +135,7 @@ class TestFolders:
     def test_method_rename(self, client: Autorender) -> None:
         folder = client.folders.rename(
             folder_no="53855hxPoq",
-            name="name",
+            name="demo2",
         )
         assert_matches_type(Folder, folder, path=["response"])
 
@@ -143,7 +143,7 @@ class TestFolders:
     def test_raw_response_rename(self, client: Autorender) -> None:
         response = client.folders.with_raw_response.rename(
             folder_no="53855hxPoq",
-            name="name",
+            name="demo2",
         )
 
         assert response.is_closed is True
@@ -155,7 +155,7 @@ class TestFolders:
     def test_streaming_response_rename(self, client: Autorender) -> None:
         with client.folders.with_streaming_response.rename(
             folder_no="53855hxPoq",
-            name="name",
+            name="demo2",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -170,7 +170,7 @@ class TestFolders:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `folder_no` but received ''"):
             client.folders.with_raw_response.rename(
                 folder_no="",
-                name="name",
+                name="demo2",
             )
 
 
@@ -182,22 +182,22 @@ class TestAsyncFolders:
     @parametrize
     async def test_method_create(self, async_client: AsyncAutorender) -> None:
         folder = await async_client.folders.create(
-            name="name",
+            name="demo2",
         )
         assert_matches_type(FolderCreateResponse, folder, path=["response"])
 
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncAutorender) -> None:
         folder = await async_client.folders.create(
-            name="name",
-            parent_folder_no="parent_folder_no",
+            name="demo2",
+            parent_folder_no="sD1LvqoDzG",
         )
         assert_matches_type(FolderCreateResponse, folder, path=["response"])
 
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncAutorender) -> None:
         response = await async_client.folders.with_raw_response.create(
-            name="name",
+            name="demo2",
         )
 
         assert response.is_closed is True
@@ -208,7 +208,7 @@ class TestAsyncFolders:
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncAutorender) -> None:
         async with async_client.folders.with_streaming_response.create(
-            name="name",
+            name="demo2",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -292,7 +292,7 @@ class TestAsyncFolders:
     async def test_method_rename(self, async_client: AsyncAutorender) -> None:
         folder = await async_client.folders.rename(
             folder_no="53855hxPoq",
-            name="name",
+            name="demo2",
         )
         assert_matches_type(Folder, folder, path=["response"])
 
@@ -300,7 +300,7 @@ class TestAsyncFolders:
     async def test_raw_response_rename(self, async_client: AsyncAutorender) -> None:
         response = await async_client.folders.with_raw_response.rename(
             folder_no="53855hxPoq",
-            name="name",
+            name="demo2",
         )
 
         assert response.is_closed is True
@@ -312,7 +312,7 @@ class TestAsyncFolders:
     async def test_streaming_response_rename(self, async_client: AsyncAutorender) -> None:
         async with async_client.folders.with_streaming_response.rename(
             folder_no="53855hxPoq",
-            name="name",
+            name="demo2",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -327,5 +327,5 @@ class TestAsyncFolders:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `folder_no` but received ''"):
             await async_client.folders.with_raw_response.rename(
                 folder_no="",
-                name="name",
+                name="demo2",
             )

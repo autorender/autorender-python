@@ -9,9 +9,12 @@ __all__ = ["FileListItem"]
 
 
 class FileListItem(BaseModel):
+    """File summary row in list responses"""
+
     created_at: Optional[datetime] = None
 
     extension: Optional[str] = None
+    """Asset category, e.g. image"""
 
     file_no: Optional[str] = None
 
@@ -24,9 +27,10 @@ class FileListItem(BaseModel):
     name: Optional[str] = None
 
     path: Optional[str] = None
+    """Relative path / display path"""
 
-    thumbnail: Optional[str] = None
-    """Thumbnail CDN URL"""
+    thumbanil: Optional[str] = None
+    """Thumbnail CDN URL (field name as returned by the API)"""
 
     url: Optional[str] = None
 

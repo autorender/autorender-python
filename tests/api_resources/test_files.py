@@ -14,7 +14,6 @@ from autorender.types import (
     FileListResponse,
     FileDeleteResponse,
     FileRenameResponse,
-    FileUpdateResponse,
 )
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -62,54 +61,6 @@ class TestFiles:
             )
 
     @parametrize
-    def test_method_update(self, client: Autorender) -> None:
-        file = client.files.update(
-            file_no="2353377462",
-        )
-        assert_matches_type(FileUpdateResponse, file, path=["response"])
-
-    @parametrize
-    def test_method_update_with_all_params(self, client: Autorender) -> None:
-        file = client.files.update(
-            file_no="2353377462",
-            add_tags=["string"],
-            metadata={"foo": "bar"},
-            remove_tags=["string"],
-        )
-        assert_matches_type(FileUpdateResponse, file, path=["response"])
-
-    @parametrize
-    def test_raw_response_update(self, client: Autorender) -> None:
-        response = client.files.with_raw_response.update(
-            file_no="2353377462",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        file = response.parse()
-        assert_matches_type(FileUpdateResponse, file, path=["response"])
-
-    @parametrize
-    def test_streaming_response_update(self, client: Autorender) -> None:
-        with client.files.with_streaming_response.update(
-            file_no="2353377462",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            file = response.parse()
-            assert_matches_type(FileUpdateResponse, file, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @parametrize
-    def test_path_params_update(self, client: Autorender) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `file_no` but received ''"):
-            client.files.with_raw_response.update(
-                file_no="",
-            )
-
-    @parametrize
     def test_method_list(self, client: Autorender) -> None:
         file = client.files.list()
         assert_matches_type(FileListResponse, file, path=["response"])
@@ -151,14 +102,14 @@ class TestFiles:
     @parametrize
     def test_method_delete(self, client: Autorender) -> None:
         file = client.files.delete(
-            "2353377462",
+            "2338056701",
         )
         assert_matches_type(FileDeleteResponse, file, path=["response"])
 
     @parametrize
     def test_raw_response_delete(self, client: Autorender) -> None:
         response = client.files.with_raw_response.delete(
-            "2353377462",
+            "2338056701",
         )
 
         assert response.is_closed is True
@@ -169,7 +120,7 @@ class TestFiles:
     @parametrize
     def test_streaming_response_delete(self, client: Autorender) -> None:
         with client.files.with_streaming_response.delete(
-            "2353377462",
+            "2338056701",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -189,16 +140,16 @@ class TestFiles:
     @parametrize
     def test_method_rename(self, client: Autorender) -> None:
         file = client.files.rename(
-            file_no="2353377462",
-            name="name",
+            file_no="2338045312",
+            name="demo",
         )
         assert_matches_type(FileRenameResponse, file, path=["response"])
 
     @parametrize
     def test_raw_response_rename(self, client: Autorender) -> None:
         response = client.files.with_raw_response.rename(
-            file_no="2353377462",
-            name="name",
+            file_no="2338045312",
+            name="demo",
         )
 
         assert response.is_closed is True
@@ -209,8 +160,8 @@ class TestFiles:
     @parametrize
     def test_streaming_response_rename(self, client: Autorender) -> None:
         with client.files.with_streaming_response.rename(
-            file_no="2353377462",
-            name="name",
+            file_no="2338045312",
+            name="demo",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -225,7 +176,7 @@ class TestFiles:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `file_no` but received ''"):
             client.files.with_raw_response.rename(
                 file_no="",
-                name="name",
+                name="demo",
             )
 
 
@@ -273,54 +224,6 @@ class TestAsyncFiles:
             )
 
     @parametrize
-    async def test_method_update(self, async_client: AsyncAutorender) -> None:
-        file = await async_client.files.update(
-            file_no="2353377462",
-        )
-        assert_matches_type(FileUpdateResponse, file, path=["response"])
-
-    @parametrize
-    async def test_method_update_with_all_params(self, async_client: AsyncAutorender) -> None:
-        file = await async_client.files.update(
-            file_no="2353377462",
-            add_tags=["string"],
-            metadata={"foo": "bar"},
-            remove_tags=["string"],
-        )
-        assert_matches_type(FileUpdateResponse, file, path=["response"])
-
-    @parametrize
-    async def test_raw_response_update(self, async_client: AsyncAutorender) -> None:
-        response = await async_client.files.with_raw_response.update(
-            file_no="2353377462",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        file = await response.parse()
-        assert_matches_type(FileUpdateResponse, file, path=["response"])
-
-    @parametrize
-    async def test_streaming_response_update(self, async_client: AsyncAutorender) -> None:
-        async with async_client.files.with_streaming_response.update(
-            file_no="2353377462",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            file = await response.parse()
-            assert_matches_type(FileUpdateResponse, file, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @parametrize
-    async def test_path_params_update(self, async_client: AsyncAutorender) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `file_no` but received ''"):
-            await async_client.files.with_raw_response.update(
-                file_no="",
-            )
-
-    @parametrize
     async def test_method_list(self, async_client: AsyncAutorender) -> None:
         file = await async_client.files.list()
         assert_matches_type(FileListResponse, file, path=["response"])
@@ -362,14 +265,14 @@ class TestAsyncFiles:
     @parametrize
     async def test_method_delete(self, async_client: AsyncAutorender) -> None:
         file = await async_client.files.delete(
-            "2353377462",
+            "2338056701",
         )
         assert_matches_type(FileDeleteResponse, file, path=["response"])
 
     @parametrize
     async def test_raw_response_delete(self, async_client: AsyncAutorender) -> None:
         response = await async_client.files.with_raw_response.delete(
-            "2353377462",
+            "2338056701",
         )
 
         assert response.is_closed is True
@@ -380,7 +283,7 @@ class TestAsyncFiles:
     @parametrize
     async def test_streaming_response_delete(self, async_client: AsyncAutorender) -> None:
         async with async_client.files.with_streaming_response.delete(
-            "2353377462",
+            "2338056701",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -400,16 +303,16 @@ class TestAsyncFiles:
     @parametrize
     async def test_method_rename(self, async_client: AsyncAutorender) -> None:
         file = await async_client.files.rename(
-            file_no="2353377462",
-            name="name",
+            file_no="2338045312",
+            name="demo",
         )
         assert_matches_type(FileRenameResponse, file, path=["response"])
 
     @parametrize
     async def test_raw_response_rename(self, async_client: AsyncAutorender) -> None:
         response = await async_client.files.with_raw_response.rename(
-            file_no="2353377462",
-            name="name",
+            file_no="2338045312",
+            name="demo",
         )
 
         assert response.is_closed is True
@@ -420,8 +323,8 @@ class TestAsyncFiles:
     @parametrize
     async def test_streaming_response_rename(self, async_client: AsyncAutorender) -> None:
         async with async_client.files.with_streaming_response.rename(
-            file_no="2353377462",
-            name="name",
+            file_no="2338045312",
+            name="demo",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -436,5 +339,5 @@ class TestAsyncFiles:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `file_no` but received ''"):
             await async_client.files.with_raw_response.rename(
                 file_no="",
-                name="name",
+                name="demo",
             )
