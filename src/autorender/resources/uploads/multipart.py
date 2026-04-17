@@ -180,7 +180,7 @@ class MultipartResource(SyncAPIResource):
         Authorization header, as auth is embedded in the presigned URL.
 
         Args:
-          body: One multipart chunk uploaded to a presigned URL
+          body: One multipart chunk
 
           extra_headers: Send extra headers
 
@@ -345,7 +345,7 @@ class AsyncMultipartResource(AsyncAPIResource):
         Authorization header, as auth is embedded in the presigned URL.
 
         Args:
-          body: One multipart chunk uploaded to a presigned URL
+          body: One multipart chunk
 
           extra_headers: Send extra headers
 
