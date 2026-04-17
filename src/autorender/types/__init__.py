@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from .file import File as File
 from .folder import Folder as Folder
 from .upload import Upload as Upload
+from .file_object import FileObject as FileObject
 from .upload_data import UploadData as UploadData
 from .file_list_item import FileListItem as FileListItem
 from .file_list_params import FileListParams as FileListParams

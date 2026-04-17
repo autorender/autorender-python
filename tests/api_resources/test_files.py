@@ -10,7 +10,7 @@ import pytest
 from autorender import Autorender, AsyncAutorender
 from tests.utils import assert_matches_type
 from autorender.types import (
-    File,
+    FileObject,
     FileListResponse,
     FileDeleteResponse,
     FileRenameResponse,
@@ -28,7 +28,7 @@ class TestFiles:
         file = client.files.retrieve(
             "2353377462",
         )
-        assert_matches_type(File, file, path=["response"])
+        assert_matches_type(FileObject, file, path=["response"])
 
     @parametrize
     def test_raw_response_retrieve(self, client: Autorender) -> None:
@@ -39,7 +39,7 @@ class TestFiles:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         file = response.parse()
-        assert_matches_type(File, file, path=["response"])
+        assert_matches_type(FileObject, file, path=["response"])
 
     @parametrize
     def test_streaming_response_retrieve(self, client: Autorender) -> None:
@@ -50,7 +50,7 @@ class TestFiles:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             file = response.parse()
-            assert_matches_type(File, file, path=["response"])
+            assert_matches_type(FileObject, file, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -239,7 +239,7 @@ class TestAsyncFiles:
         file = await async_client.files.retrieve(
             "2353377462",
         )
-        assert_matches_type(File, file, path=["response"])
+        assert_matches_type(FileObject, file, path=["response"])
 
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncAutorender) -> None:
@@ -250,7 +250,7 @@ class TestAsyncFiles:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         file = await response.parse()
-        assert_matches_type(File, file, path=["response"])
+        assert_matches_type(FileObject, file, path=["response"])
 
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncAutorender) -> None:
@@ -261,7 +261,7 @@ class TestAsyncFiles:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             file = await response.parse()
-            assert_matches_type(File, file, path=["response"])
+            assert_matches_type(FileObject, file, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

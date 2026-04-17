@@ -5,7 +5,7 @@ from datetime import datetime
 
 from .._models import BaseModel
 
-__all__ = ["File", "Data", "DataDimensions", "DataWorkspace"]
+__all__ = ["FileObject", "Data", "DataDimensions", "DataWorkspace"]
 
 
 class DataDimensions(BaseModel):
@@ -33,7 +33,7 @@ class Data(BaseModel):
 
     file_no: Optional[str] = None
 
-    folder: Optional[object] = None
+    folder: Optional[str] = None
 
     format: Optional[str] = None
 
@@ -52,7 +52,7 @@ class Data(BaseModel):
     workspace: Optional[DataWorkspace] = None
 
 
-class File(BaseModel):
+class FileObject(BaseModel):
     data: Optional[Data] = None
 
     success: Optional[bool] = None
