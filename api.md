@@ -33,8 +33,8 @@ Types:
 
 ```python
 from autorender.types import (
-    File,
     FileListItem,
+    FileObject,
     FileUpdateResponse,
     FileListResponse,
     FileDeleteResponse,
@@ -44,7 +44,7 @@ from autorender.types import (
 
 Methods:
 
-- <code title="get /api/v1/files/{fileNo}">client.files.<a href="./src/autorender/resources/files.py">retrieve</a>(file_no) -> <a href="./src/autorender/types/file.py">File</a></code>
+- <code title="get /api/v1/files/{fileNo}">client.files.<a href="./src/autorender/resources/files.py">retrieve</a>(file_no) -> <a href="./src/autorender/types/file_object.py">FileObject</a></code>
 - <code title="patch /api/v1/files/{fileNo}">client.files.<a href="./src/autorender/resources/files.py">update</a>(file_no, \*\*<a href="src/autorender/types/file_update_params.py">params</a>) -> <a href="./src/autorender/types/file_update_response.py">FileUpdateResponse</a></code>
 - <code title="get /api/v1/files">client.files.<a href="./src/autorender/resources/files.py">list</a>(\*\*<a href="src/autorender/types/file_list_params.py">params</a>) -> <a href="./src/autorender/types/file_list_response.py">FileListResponse</a></code>
 - <code title="delete /api/v1/files/{fileNo}">client.files.<a href="./src/autorender/resources/files.py">delete</a>(file_no) -> <a href="./src/autorender/types/file_delete_response.py">FileDeleteResponse</a></code>

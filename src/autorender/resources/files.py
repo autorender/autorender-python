@@ -18,8 +18,8 @@ from .._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..types.file import File
 from .._base_client import make_request_options
+from ..types.file_object import FileObject
 from ..types.file_list_response import FileListResponse
 from ..types.file_delete_response import FileDeleteResponse
 from ..types.file_rename_response import FileRenameResponse
@@ -60,7 +60,7 @@ class FilesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> File:
+    ) -> FileObject:
         """
         Retrieve detailed information about a specific file by its file number.
 
@@ -80,7 +80,7 @@ class FilesResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=File,
+            cast_to=FileObject,
         )
 
     def update(
@@ -312,7 +312,7 @@ class AsyncFilesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> File:
+    ) -> FileObject:
         """
         Retrieve detailed information about a specific file by its file number.
 
@@ -332,7 +332,7 @@ class AsyncFilesResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=File,
+            cast_to=FileObject,
         )
 
     async def update(

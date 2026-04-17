@@ -23,7 +23,7 @@ from autorender import Autorender, AsyncAutorender, APIResponseValidationError
 from autorender._types import Omit
 from autorender._utils import asyncify
 from autorender._models import BaseModel, FinalRequestOptions
-from autorender._exceptions import APIStatusError, APITimeoutError, AutorenderError, APIResponseValidationError
+from autorender._exceptions import APIStatusError, APITimeoutError, APIResponseValidationError
 from autorender._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
@@ -404,10 +404,19 @@ class TestAutorender:
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("Authorization") == f"Bearer {api_key}"
 
-        with pytest.raises(AutorenderError):
-            with update_env(**{"AUTORENDER_API_KEY": Omit()}):
-                client2 = Autorender(base_url=base_url, api_key=None, _strict_response_validation=True)
-            _ = client2
+        with update_env(**{"AUTORENDER_API_KEY": Omit()}):
+            client2 = Autorender(base_url=base_url, api_key=None, _strict_response_validation=True)
+
+        with pytest.raises(
+            TypeError,
+            match="Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted",
+        ):
+            client2._build_request(FinalRequestOptions(method="get", url="/foo"))
+
+        request2 = client2._build_request(
+            FinalRequestOptions(method="get", url="/foo", headers={"Authorization": Omit()})
+        )
+        assert request2.headers.get("Authorization") is None
 
     def test_default_query_option(self) -> None:
         client = Autorender(
@@ -1331,10 +1340,19 @@ class TestAsyncAutorender:
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("Authorization") == f"Bearer {api_key}"
 
-        with pytest.raises(AutorenderError):
-            with update_env(**{"AUTORENDER_API_KEY": Omit()}):
-                client2 = AsyncAutorender(base_url=base_url, api_key=None, _strict_response_validation=True)
-            _ = client2
+        with update_env(**{"AUTORENDER_API_KEY": Omit()}):
+            client2 = AsyncAutorender(base_url=base_url, api_key=None, _strict_response_validation=True)
+
+        with pytest.raises(
+            TypeError,
+            match="Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted",
+        ):
+            client2._build_request(FinalRequestOptions(method="get", url="/foo"))
+
+        request2 = client2._build_request(
+            FinalRequestOptions(method="get", url="/foo", headers={"Authorization": Omit()})
+        )
+        assert request2.headers.get("Authorization") is None
 
     async def test_default_query_option(self) -> None:
         client = AsyncAutorender(
