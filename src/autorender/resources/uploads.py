@@ -7,8 +7,9 @@ from typing import Mapping, cast
 import httpx
 
 from ..types import upload_create_params, upload_create_from_url_params
+from .._files import deepcopy_with_paths
 from .._types import Body, Omit, Query, Headers, NotGiven, FileTypes, omit, not_given
-from .._utils import extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
+from .._utils import extract_files, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -90,7 +91,7 @@ class UploadsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        body = deepcopy_minimal(
+        body = deepcopy_with_paths(
             {
                 "file": file,
                 "file_name": file_name,
@@ -100,7 +101,8 @@ class UploadsResource(SyncAPIResource):
                 "random_prefix": random_prefix,
                 "tags": tags,
                 "transform": transform,
-            }
+            },
+            [["file"]],
         )
         files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
         # It should be noted that the actual Content-Type header that will be
@@ -252,7 +254,7 @@ class AsyncUploadsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        body = deepcopy_minimal(
+        body = deepcopy_with_paths(
             {
                 "file": file,
                 "file_name": file_name,
@@ -262,7 +264,8 @@ class AsyncUploadsResource(AsyncAPIResource):
                 "random_prefix": random_prefix,
                 "tags": tags,
                 "transform": transform,
-            }
+            },
+            [["file"]],
         )
         files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
         # It should be noted that the actual Content-Type header that will be
