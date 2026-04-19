@@ -39,7 +39,6 @@ from .utils import update_env
 
 T = TypeVar("T")
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
-api_key = "My API Key"
 
 
 def _get_params(client: BaseClient[Any, Any]) -> dict[str, str]:
@@ -136,10 +135,6 @@ class TestAutorender:
         copied = client.copy()
         assert id(copied) != id(client)
 
-        copied = client.copy(api_key="another My API Key")
-        assert copied.api_key == "another My API Key"
-        assert client.api_key == "My API Key"
-
     def test_copy_default_options(self, client: Autorender) -> None:
         # options that have a default are overridden correctly
         copied = client.copy(max_retries=7)
@@ -157,9 +152,7 @@ class TestAutorender:
         assert isinstance(client.timeout, httpx.Timeout)
 
     def test_copy_default_headers(self) -> None:
-        client = Autorender(
-            base_url=base_url, api_key=api_key, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
-        )
+        client = Autorender(base_url=base_url, _strict_response_validation=True, default_headers={"X-Foo": "bar"})
         assert client.default_headers["X-Foo"] == "bar"
 
         # does not override the already given value when not specified
@@ -192,9 +185,7 @@ class TestAutorender:
         client.close()
 
     def test_copy_default_query(self) -> None:
-        client = Autorender(
-            base_url=base_url, api_key=api_key, _strict_response_validation=True, default_query={"foo": "bar"}
-        )
+        client = Autorender(base_url=base_url, _strict_response_validation=True, default_query={"foo": "bar"})
         assert _get_params(client)["foo"] == "bar"
 
         # does not override the already given value when not specified
@@ -318,9 +309,7 @@ class TestAutorender:
         assert timeout == httpx.Timeout(100.0)
 
     def test_client_timeout_option(self) -> None:
-        client = Autorender(
-            base_url=base_url, api_key=api_key, _strict_response_validation=True, timeout=httpx.Timeout(0)
-        )
+        client = Autorender(base_url=base_url, _strict_response_validation=True, timeout=httpx.Timeout(0))
 
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -331,9 +320,7 @@ class TestAutorender:
     def test_http_client_timeout_option(self) -> None:
         # custom timeout given to the httpx client should be used
         with httpx.Client(timeout=None) as http_client:
-            client = Autorender(
-                base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
-            )
+            client = Autorender(base_url=base_url, _strict_response_validation=True, http_client=http_client)
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -343,9 +330,7 @@ class TestAutorender:
 
         # no timeout given to the httpx client should not use the httpx default
         with httpx.Client() as http_client:
-            client = Autorender(
-                base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
-            )
+            client = Autorender(base_url=base_url, _strict_response_validation=True, http_client=http_client)
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -355,9 +340,7 @@ class TestAutorender:
 
         # explicitly passing the default timeout currently results in it being ignored
         with httpx.Client(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
-            client = Autorender(
-                base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
-            )
+            client = Autorender(base_url=base_url, _strict_response_validation=True, http_client=http_client)
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -368,24 +351,16 @@ class TestAutorender:
     async def test_invalid_http_client(self) -> None:
         with pytest.raises(TypeError, match="Invalid `http_client` arg"):
             async with httpx.AsyncClient() as http_client:
-                Autorender(
-                    base_url=base_url,
-                    api_key=api_key,
-                    _strict_response_validation=True,
-                    http_client=cast(Any, http_client),
-                )
+                Autorender(base_url=base_url, _strict_response_validation=True, http_client=cast(Any, http_client))
 
     def test_default_headers_option(self) -> None:
-        test_client = Autorender(
-            base_url=base_url, api_key=api_key, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
-        )
+        test_client = Autorender(base_url=base_url, _strict_response_validation=True, default_headers={"X-Foo": "bar"})
         request = test_client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "bar"
         assert request.headers.get("x-stainless-lang") == "python"
 
         test_client2 = Autorender(
             base_url=base_url,
-            api_key=api_key,
             _strict_response_validation=True,
             default_headers={
                 "X-Foo": "stainless",
@@ -399,29 +374,8 @@ class TestAutorender:
         test_client.close()
         test_client2.close()
 
-    def test_validate_headers(self) -> None:
-        client = Autorender(base_url=base_url, api_key=api_key, _strict_response_validation=True)
-        request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        assert request.headers.get("Authorization") == f"Bearer {api_key}"
-
-        with update_env(**{"AUTORENDER_API_KEY": Omit()}):
-            client2 = Autorender(base_url=base_url, api_key=None, _strict_response_validation=True)
-
-        with pytest.raises(
-            TypeError,
-            match="Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted",
-        ):
-            client2._build_request(FinalRequestOptions(method="get", url="/foo"))
-
-        request2 = client2._build_request(
-            FinalRequestOptions(method="get", url="/foo", headers={"Authorization": Omit()})
-        )
-        assert request2.headers.get("Authorization") is None
-
     def test_default_query_option(self) -> None:
-        client = Autorender(
-            base_url=base_url, api_key=api_key, _strict_response_validation=True, default_query={"query_param": "bar"}
-        )
+        client = Autorender(base_url=base_url, _strict_response_validation=True, default_query={"query_param": "bar"})
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         url = httpx.URL(request.url)
         assert dict(url.params) == {"query_param": "bar"}
@@ -616,7 +570,6 @@ class TestAutorender:
 
         with Autorender(
             base_url=base_url,
-            api_key=api_key,
             _strict_response_validation=True,
             http_client=httpx.Client(transport=MockTransport(handler=mock_handler)),
         ) as client:
@@ -710,7 +663,7 @@ class TestAutorender:
         assert response.foo == 2
 
     def test_base_url_setter(self) -> None:
-        client = Autorender(base_url="https://example.com/from_init", api_key=api_key, _strict_response_validation=True)
+        client = Autorender(base_url="https://example.com/from_init", _strict_response_validation=True)
         assert client.base_url == "https://example.com/from_init/"
 
         client.base_url = "https://example.com/from_setter"  # type: ignore[assignment]
@@ -721,18 +674,15 @@ class TestAutorender:
 
     def test_base_url_env(self) -> None:
         with update_env(AUTORENDER_BASE_URL="http://localhost:5000/from/env"):
-            client = Autorender(api_key=api_key, _strict_response_validation=True)
+            client = Autorender(_strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
     @pytest.mark.parametrize(
         "client",
         [
-            Autorender(
-                base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
-            ),
+            Autorender(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
             Autorender(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
             ),
@@ -753,12 +703,9 @@ class TestAutorender:
     @pytest.mark.parametrize(
         "client",
         [
-            Autorender(
-                base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
-            ),
+            Autorender(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
             Autorender(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
             ),
@@ -779,12 +726,9 @@ class TestAutorender:
     @pytest.mark.parametrize(
         "client",
         [
-            Autorender(
-                base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
-            ),
+            Autorender(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
             Autorender(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
             ),
@@ -803,7 +747,7 @@ class TestAutorender:
         client.close()
 
     def test_copied_client_does_not_close_http(self) -> None:
-        test_client = Autorender(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        test_client = Autorender(base_url=base_url, _strict_response_validation=True)
         assert not test_client.is_closed()
 
         copied = test_client.copy()
@@ -814,7 +758,7 @@ class TestAutorender:
         assert not test_client.is_closed()
 
     def test_client_context_manager(self) -> None:
-        test_client = Autorender(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        test_client = Autorender(base_url=base_url, _strict_response_validation=True)
         with test_client as c2:
             assert c2 is test_client
             assert not c2.is_closed()
@@ -835,9 +779,7 @@ class TestAutorender:
 
     def test_client_max_retries_validation(self) -> None:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
-            Autorender(
-                base_url=base_url, api_key=api_key, _strict_response_validation=True, max_retries=cast(Any, None)
-            )
+            Autorender(base_url=base_url, _strict_response_validation=True, max_retries=cast(Any, None))
 
     @pytest.mark.respx(base_url=base_url)
     def test_received_text_for_expected_json(self, respx_mock: MockRouter) -> None:
@@ -846,12 +788,12 @@ class TestAutorender:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = Autorender(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        strict_client = Autorender(base_url=base_url, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             strict_client.get("/foo", cast_to=Model)
 
-        non_strict_client = Autorender(base_url=base_url, api_key=api_key, _strict_response_validation=False)
+        non_strict_client = Autorender(base_url=base_url, _strict_response_validation=False)
 
         response = non_strict_client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -895,7 +837,7 @@ class TestAutorender:
         respx_mock.post("/api/v1/uploads").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            client.uploads.with_streaming_response.create(file=b"Example data", file_name="file_name").__enter__()
+            client.uploads.with_streaming_response.create(file=b"Example data", file_name="product.jpg").__enter__()
 
         assert _get_open_connections(client) == 0
 
@@ -905,7 +847,7 @@ class TestAutorender:
         respx_mock.post("/api/v1/uploads").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            client.uploads.with_streaming_response.create(file=b"Example data", file_name="file_name").__enter__()
+            client.uploads.with_streaming_response.create(file=b"Example data", file_name="product.jpg").__enter__()
         assert _get_open_connections(client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -934,7 +876,7 @@ class TestAutorender:
 
         respx_mock.post("/api/v1/uploads").mock(side_effect=retry_handler)
 
-        response = client.uploads.with_raw_response.create(file=b"Example data", file_name="file_name")
+        response = client.uploads.with_raw_response.create(file=b"Example data", file_name="product.jpg")
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -959,7 +901,7 @@ class TestAutorender:
         respx_mock.post("/api/v1/uploads").mock(side_effect=retry_handler)
 
         response = client.uploads.with_raw_response.create(
-            file=b"Example data", file_name="file_name", extra_headers={"x-stainless-retry-count": Omit()}
+            file=b"Example data", file_name="product.jpg", extra_headers={"x-stainless-retry-count": Omit()}
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
@@ -984,7 +926,7 @@ class TestAutorender:
         respx_mock.post("/api/v1/uploads").mock(side_effect=retry_handler)
 
         response = client.uploads.with_raw_response.create(
-            file=b"Example data", file_name="file_name", extra_headers={"x-stainless-retry-count": "42"}
+            file=b"Example data", file_name="product.jpg", extra_headers={"x-stainless-retry-count": "42"}
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
@@ -1070,10 +1012,6 @@ class TestAsyncAutorender:
         copied = async_client.copy()
         assert id(copied) != id(async_client)
 
-        copied = async_client.copy(api_key="another My API Key")
-        assert copied.api_key == "another My API Key"
-        assert async_client.api_key == "My API Key"
-
     def test_copy_default_options(self, async_client: AsyncAutorender) -> None:
         # options that have a default are overridden correctly
         copied = async_client.copy(max_retries=7)
@@ -1091,9 +1029,7 @@ class TestAsyncAutorender:
         assert isinstance(async_client.timeout, httpx.Timeout)
 
     async def test_copy_default_headers(self) -> None:
-        client = AsyncAutorender(
-            base_url=base_url, api_key=api_key, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
-        )
+        client = AsyncAutorender(base_url=base_url, _strict_response_validation=True, default_headers={"X-Foo": "bar"})
         assert client.default_headers["X-Foo"] == "bar"
 
         # does not override the already given value when not specified
@@ -1126,9 +1062,7 @@ class TestAsyncAutorender:
         await client.close()
 
     async def test_copy_default_query(self) -> None:
-        client = AsyncAutorender(
-            base_url=base_url, api_key=api_key, _strict_response_validation=True, default_query={"foo": "bar"}
-        )
+        client = AsyncAutorender(base_url=base_url, _strict_response_validation=True, default_query={"foo": "bar"})
         assert _get_params(client)["foo"] == "bar"
 
         # does not override the already given value when not specified
@@ -1254,9 +1188,7 @@ class TestAsyncAutorender:
         assert timeout == httpx.Timeout(100.0)
 
     async def test_client_timeout_option(self) -> None:
-        client = AsyncAutorender(
-            base_url=base_url, api_key=api_key, _strict_response_validation=True, timeout=httpx.Timeout(0)
-        )
+        client = AsyncAutorender(base_url=base_url, _strict_response_validation=True, timeout=httpx.Timeout(0))
 
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -1267,9 +1199,7 @@ class TestAsyncAutorender:
     async def test_http_client_timeout_option(self) -> None:
         # custom timeout given to the httpx client should be used
         async with httpx.AsyncClient(timeout=None) as http_client:
-            client = AsyncAutorender(
-                base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
-            )
+            client = AsyncAutorender(base_url=base_url, _strict_response_validation=True, http_client=http_client)
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -1279,9 +1209,7 @@ class TestAsyncAutorender:
 
         # no timeout given to the httpx client should not use the httpx default
         async with httpx.AsyncClient() as http_client:
-            client = AsyncAutorender(
-                base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
-            )
+            client = AsyncAutorender(base_url=base_url, _strict_response_validation=True, http_client=http_client)
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -1291,9 +1219,7 @@ class TestAsyncAutorender:
 
         # explicitly passing the default timeout currently results in it being ignored
         async with httpx.AsyncClient(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
-            client = AsyncAutorender(
-                base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
-            )
+            client = AsyncAutorender(base_url=base_url, _strict_response_validation=True, http_client=http_client)
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -1304,16 +1230,11 @@ class TestAsyncAutorender:
     def test_invalid_http_client(self) -> None:
         with pytest.raises(TypeError, match="Invalid `http_client` arg"):
             with httpx.Client() as http_client:
-                AsyncAutorender(
-                    base_url=base_url,
-                    api_key=api_key,
-                    _strict_response_validation=True,
-                    http_client=cast(Any, http_client),
-                )
+                AsyncAutorender(base_url=base_url, _strict_response_validation=True, http_client=cast(Any, http_client))
 
     async def test_default_headers_option(self) -> None:
         test_client = AsyncAutorender(
-            base_url=base_url, api_key=api_key, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
+            base_url=base_url, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         request = test_client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "bar"
@@ -1321,7 +1242,6 @@ class TestAsyncAutorender:
 
         test_client2 = AsyncAutorender(
             base_url=base_url,
-            api_key=api_key,
             _strict_response_validation=True,
             default_headers={
                 "X-Foo": "stainless",
@@ -1335,28 +1255,9 @@ class TestAsyncAutorender:
         await test_client.close()
         await test_client2.close()
 
-    def test_validate_headers(self) -> None:
-        client = AsyncAutorender(base_url=base_url, api_key=api_key, _strict_response_validation=True)
-        request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        assert request.headers.get("Authorization") == f"Bearer {api_key}"
-
-        with update_env(**{"AUTORENDER_API_KEY": Omit()}):
-            client2 = AsyncAutorender(base_url=base_url, api_key=None, _strict_response_validation=True)
-
-        with pytest.raises(
-            TypeError,
-            match="Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted",
-        ):
-            client2._build_request(FinalRequestOptions(method="get", url="/foo"))
-
-        request2 = client2._build_request(
-            FinalRequestOptions(method="get", url="/foo", headers={"Authorization": Omit()})
-        )
-        assert request2.headers.get("Authorization") is None
-
     async def test_default_query_option(self) -> None:
         client = AsyncAutorender(
-            base_url=base_url, api_key=api_key, _strict_response_validation=True, default_query={"query_param": "bar"}
+            base_url=base_url, _strict_response_validation=True, default_query={"query_param": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         url = httpx.URL(request.url)
@@ -1552,7 +1453,6 @@ class TestAsyncAutorender:
 
         async with AsyncAutorender(
             base_url=base_url,
-            api_key=api_key,
             _strict_response_validation=True,
             http_client=httpx.AsyncClient(transport=MockTransport(handler=mock_handler)),
         ) as client:
@@ -1650,9 +1550,7 @@ class TestAsyncAutorender:
         assert response.foo == 2
 
     async def test_base_url_setter(self) -> None:
-        client = AsyncAutorender(
-            base_url="https://example.com/from_init", api_key=api_key, _strict_response_validation=True
-        )
+        client = AsyncAutorender(base_url="https://example.com/from_init", _strict_response_validation=True)
         assert client.base_url == "https://example.com/from_init/"
 
         client.base_url = "https://example.com/from_setter"  # type: ignore[assignment]
@@ -1663,18 +1561,15 @@ class TestAsyncAutorender:
 
     async def test_base_url_env(self) -> None:
         with update_env(AUTORENDER_BASE_URL="http://localhost:5000/from/env"):
-            client = AsyncAutorender(api_key=api_key, _strict_response_validation=True)
+            client = AsyncAutorender(_strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncAutorender(
-                base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
-            ),
+            AsyncAutorender(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
             AsyncAutorender(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
             ),
@@ -1695,12 +1590,9 @@ class TestAsyncAutorender:
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncAutorender(
-                base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
-            ),
+            AsyncAutorender(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
             AsyncAutorender(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
             ),
@@ -1721,12 +1613,9 @@ class TestAsyncAutorender:
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncAutorender(
-                base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
-            ),
+            AsyncAutorender(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
             AsyncAutorender(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
             ),
@@ -1745,7 +1634,7 @@ class TestAsyncAutorender:
         await client.close()
 
     async def test_copied_client_does_not_close_http(self) -> None:
-        test_client = AsyncAutorender(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        test_client = AsyncAutorender(base_url=base_url, _strict_response_validation=True)
         assert not test_client.is_closed()
 
         copied = test_client.copy()
@@ -1757,7 +1646,7 @@ class TestAsyncAutorender:
         assert not test_client.is_closed()
 
     async def test_client_context_manager(self) -> None:
-        test_client = AsyncAutorender(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        test_client = AsyncAutorender(base_url=base_url, _strict_response_validation=True)
         async with test_client as c2:
             assert c2 is test_client
             assert not c2.is_closed()
@@ -1780,9 +1669,7 @@ class TestAsyncAutorender:
 
     async def test_client_max_retries_validation(self) -> None:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
-            AsyncAutorender(
-                base_url=base_url, api_key=api_key, _strict_response_validation=True, max_retries=cast(Any, None)
-            )
+            AsyncAutorender(base_url=base_url, _strict_response_validation=True, max_retries=cast(Any, None))
 
     @pytest.mark.respx(base_url=base_url)
     async def test_received_text_for_expected_json(self, respx_mock: MockRouter) -> None:
@@ -1791,12 +1678,12 @@ class TestAsyncAutorender:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = AsyncAutorender(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        strict_client = AsyncAutorender(base_url=base_url, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             await strict_client.get("/foo", cast_to=Model)
 
-        non_strict_client = AsyncAutorender(base_url=base_url, api_key=api_key, _strict_response_validation=False)
+        non_strict_client = AsyncAutorender(base_url=base_url, _strict_response_validation=False)
 
         response = await non_strict_client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -1843,7 +1730,7 @@ class TestAsyncAutorender:
 
         with pytest.raises(APITimeoutError):
             await async_client.uploads.with_streaming_response.create(
-                file=b"Example data", file_name="file_name"
+                file=b"Example data", file_name="product.jpg"
             ).__aenter__()
 
         assert _get_open_connections(async_client) == 0
@@ -1857,7 +1744,7 @@ class TestAsyncAutorender:
 
         with pytest.raises(APIStatusError):
             await async_client.uploads.with_streaming_response.create(
-                file=b"Example data", file_name="file_name"
+                file=b"Example data", file_name="product.jpg"
             ).__aenter__()
         assert _get_open_connections(async_client) == 0
 
@@ -1887,7 +1774,7 @@ class TestAsyncAutorender:
 
         respx_mock.post("/api/v1/uploads").mock(side_effect=retry_handler)
 
-        response = await client.uploads.with_raw_response.create(file=b"Example data", file_name="file_name")
+        response = await client.uploads.with_raw_response.create(file=b"Example data", file_name="product.jpg")
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1912,7 +1799,7 @@ class TestAsyncAutorender:
         respx_mock.post("/api/v1/uploads").mock(side_effect=retry_handler)
 
         response = await client.uploads.with_raw_response.create(
-            file=b"Example data", file_name="file_name", extra_headers={"x-stainless-retry-count": Omit()}
+            file=b"Example data", file_name="product.jpg", extra_headers={"x-stainless-retry-count": Omit()}
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
@@ -1937,7 +1824,7 @@ class TestAsyncAutorender:
         respx_mock.post("/api/v1/uploads").mock(side_effect=retry_handler)
 
         response = await client.uploads.with_raw_response.create(
-            file=b"Example data", file_name="file_name", extra_headers={"x-stainless-retry-count": "42"}
+            file=b"Example data", file_name="product.jpg", extra_headers={"x-stainless-retry-count": "42"}
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"

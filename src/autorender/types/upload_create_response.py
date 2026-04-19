@@ -5,23 +5,27 @@ from datetime import datetime
 
 from .._models import BaseModel
 
-__all__ = ["FileListResponse", "Item"]
+__all__ = ["UploadCreateResponse"]
 
 
-class Item(BaseModel):
+class UploadCreateResponse(BaseModel):
+    """Upload created"""
+
     id: str
 
     created_at: datetime
 
-    file_no: str
+    custom_id: Optional[str] = None
 
-    folder_name: Optional[str] = None
+    file_no: str
 
     folder_no: Optional[str] = None
 
-    format: Optional[str] = None
-
     height: Optional[int] = None
+
+    is_duplicate: bool
+
+    is_private: bool
 
     metadata: Optional[Dict[str, object]] = None
 
@@ -33,28 +37,16 @@ class Item(BaseModel):
 
     size: int
 
-    source: str
-
     tags: List[str]
 
-    updated_at: Optional[datetime] = None
+    upload_source: str
 
     url: str
 
     width: Optional[int] = None
 
+    workspace_id: str
 
-class FileListResponse(BaseModel):
-    """Files list"""
+    format: Optional[str] = None
 
-    is_page_next: bool
-
-    items: List[Item]
-
-    limit: int
-
-    page: int
-
-    total_count: int
-
-    total_pages: int
+    hash: Optional[str] = None

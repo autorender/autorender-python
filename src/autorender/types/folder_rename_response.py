@@ -5,11 +5,11 @@ from datetime import datetime
 
 from .._models import BaseModel
 
-__all__ = ["FolderCreateResponse"]
+__all__ = ["FolderRenameResponse"]
 
 
-class FolderCreateResponse(BaseModel):
-    """Folder created"""
+class FolderRenameResponse(BaseModel):
+    """Renamed folder"""
 
     id: str
 

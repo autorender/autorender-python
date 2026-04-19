@@ -25,45 +25,34 @@ pip install autorender-python
 The full API of this library can be found in [api.md](api.md).
 
 ```python
-import os
 from autorender import Autorender
 
-client = Autorender(
-    api_key=os.environ.get("AUTORENDER_API_KEY"),  # This is the default and can be omitted
-)
+client = Autorender()
 
 upload = client.uploads.create(
     file=b"Example data",
-    file_name="file_name",
+    file_name="product.jpg",
 )
-print(upload.data)
+print(upload.id)
 ```
-
-While you can provide an `api_key` keyword argument,
-we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `AUTORENDER_API_KEY="My API Key"` to your `.env` file
-so that your API Key is not stored in source control.
 
 ## Async usage
 
 Simply import `AsyncAutorender` instead of `Autorender` and use `await` with each API call:
 
 ```python
-import os
 import asyncio
 from autorender import AsyncAutorender
 
-client = AsyncAutorender(
-    api_key=os.environ.get("AUTORENDER_API_KEY"),  # This is the default and can be omitted
-)
+client = AsyncAutorender()
 
 
 async def main() -> None:
     upload = await client.uploads.create(
         file=b"Example data",
-        file_name="file_name",
+        file_name="product.jpg",
     )
-    print(upload.data)
+    print(upload.id)
 
 
 asyncio.run(main())
@@ -85,7 +74,6 @@ pip install autorender-python[aiohttp]
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
 
 ```python
-import os
 import asyncio
 from autorender import DefaultAioHttpClient
 from autorender import AsyncAutorender
@@ -93,14 +81,13 @@ from autorender import AsyncAutorender
 
 async def main() -> None:
     async with AsyncAutorender(
-        api_key=os.environ.get("AUTORENDER_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
         upload = await client.uploads.create(
             file=b"Example data",
-            file_name="file_name",
+            file_name="product.jpg",
         )
-        print(upload.data)
+        print(upload.id)
 
 
 asyncio.run(main())
@@ -127,7 +114,7 @@ client = Autorender()
 
 client.uploads.create(
     file=Path("/path/to/file"),
-    file_name="file_name",
+    file_name="product.jpg",
 )
 ```
 
@@ -151,7 +138,7 @@ client = Autorender()
 try:
     client.uploads.create(
         file=b"Example data",
-        file_name="file_name",
+        file_name="product.jpg",
     )
 except autorender.APIConnectionError as e:
     print("The server could not be reached")
@@ -197,7 +184,7 @@ client = Autorender(
 # Or, configure per-request:
 client.with_options(max_retries=5).uploads.create(
     file=b"Example data",
-    file_name="file_name",
+    file_name="product.jpg",
 )
 ```
 
@@ -223,7 +210,7 @@ client = Autorender(
 # Override per-request:
 client.with_options(timeout=5.0).uploads.create(
     file=b"Example data",
-    file_name="file_name",
+    file_name="product.jpg",
 )
 ```
 
@@ -267,12 +254,12 @@ from autorender import Autorender
 client = Autorender()
 response = client.uploads.with_raw_response.create(
     file=b"Example data",
-    file_name="file_name",
+    file_name="product.jpg",
 )
 print(response.headers.get('X-My-Header'))
 
 upload = response.parse()  # get the object that `uploads.create()` would have returned
-print(upload.data)
+print(upload.id)
 ```
 
 These methods return an [`APIResponse`](https://github.com/autorenderhq/autorender-python/tree/main/src/autorender/_response.py) object.
@@ -288,7 +275,7 @@ To stream the response body, use `.with_streaming_response` instead, which requi
 ```python
 with client.uploads.with_streaming_response.create(
     file=b"Example data",
-    file_name="file_name",
+    file_name="product.jpg",
 ) as response:
     print(response.headers.get("X-My-Header"))
 

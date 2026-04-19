@@ -2,13 +2,14 @@
 
 from typing import Dict, List, Optional
 from datetime import datetime
+from typing_extensions import Literal
 
 from .._models import BaseModel
 
-__all__ = ["FileListResponse", "Item"]
+__all__ = ["FileRetrieveResponse", "Data"]
 
 
-class Item(BaseModel):
+class Data(BaseModel):
     id: str
 
     created_at: datetime
@@ -44,17 +45,9 @@ class Item(BaseModel):
     width: Optional[int] = None
 
 
-class FileListResponse(BaseModel):
-    """Files list"""
+class FileRetrieveResponse(BaseModel):
+    """File details"""
 
-    is_page_next: bool
+    data: Data
 
-    items: List[Item]
-
-    limit: int
-
-    page: int
-
-    total_count: int
-
-    total_pages: int
+    success: Literal[True]

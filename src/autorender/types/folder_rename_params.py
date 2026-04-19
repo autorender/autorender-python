@@ -9,3 +9,4 @@ __all__ = ["FolderRenameParams"]
 
 class FolderRenameParams(TypedDict, total=False):
     name: Required[str]
+    """New folder name without slashes"""

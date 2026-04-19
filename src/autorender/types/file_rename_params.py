@@ -9,4 +9,4 @@ __all__ = ["FileRenameParams"]
 
 class FileRenameParams(TypedDict, total=False):
     name: Required[str]
-    """New base name; extension may be applied by the server"""
+    """New file name without extension or path separators"""

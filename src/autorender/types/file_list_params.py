@@ -2,32 +2,28 @@
 
 from __future__ import annotations
 
-from typing_extensions import Literal, TypedDict
+from typing_extensions import Literal, Annotated, TypedDict
+
+from .._utils import PropertyInfo
 
 __all__ = ["FileListParams"]
 
 
 class FileListParams(TypedDict, total=False):
-    folder_no: str
-    """Restrict results to files in this folder (folder number)"""
+    folder_no: Annotated[str, PropertyInfo(alias="folderNo")]
+    """Exact folder number"""
 
     limit: int
-    """Items per page"""
 
     name: str
-    """Filter by filename (partial match, if supported)"""
+    """Partial name match (case-insensitive)"""
 
     page: int
-    """Page number (1-based)"""
 
     path: str
-    """Filter by path prefix (if supported)"""
+    """Folder prefix (e.g. products/sku123/)"""
 
-    sort_field: Literal["file_size", "name", "created_at", "updated_at"]
-    """Field to sort by"""
-
-    sort_order: Literal["asc", "desc"]
-    """Sort direction"""
+    sort: Literal["created_at_asc", "created_at_desc", "size_asc", "size_desc"]
 
     tags: str
-    """Comma-separated tags (if supported)"""
+    """Comma-separated tags"""

@@ -12,7 +12,6 @@ from . import _exceptions
 from ._qs import Querystring
 from ._types import (
     Omit,
-    Headers,
     Timeout,
     NotGiven,
     Transport,
@@ -102,18 +101,21 @@ class Autorender(SyncAPIClient):
 
     @cached_property
     def uploads(self) -> UploadsResource:
+        """Upload endpoints (API key required)"""
         from .resources.uploads import UploadsResource
 
         return UploadsResource(self)
 
     @cached_property
     def files(self) -> FilesResource:
+        """File management endpoints (API key required)"""
         from .resources.files import FilesResource
 
         return FilesResource(self)
 
     @cached_property
     def folders(self) -> FoldersResource:
+        """Folder management endpoints (API key required)"""
         from .resources.folders import FoldersResource
 
         return FoldersResource(self)
@@ -133,29 +135,12 @@ class Autorender(SyncAPIClient):
 
     @property
     @override
-    def auth_headers(self) -> dict[str, str]:
-        api_key = self.api_key
-        if api_key is None:
-            return {}
-        return {"Authorization": f"Bearer {api_key}"}
-
-    @property
-    @override
     def default_headers(self) -> dict[str, str | Omit]:
         return {
             **super().default_headers,
             "X-Stainless-Async": "false",
             **self._custom_headers,
         }
-
-    @override
-    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
-        if headers.get("Authorization") or isinstance(custom_headers.get("Authorization"), Omit):
-            return
-
-        raise TypeError(
-            '"Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted"'
-        )
 
     def copy(
         self,
@@ -295,18 +280,21 @@ class AsyncAutorender(AsyncAPIClient):
 
     @cached_property
     def uploads(self) -> AsyncUploadsResource:
+        """Upload endpoints (API key required)"""
         from .resources.uploads import AsyncUploadsResource
 
         return AsyncUploadsResource(self)
 
     @cached_property
     def files(self) -> AsyncFilesResource:
+        """File management endpoints (API key required)"""
         from .resources.files import AsyncFilesResource
 
         return AsyncFilesResource(self)
 
     @cached_property
     def folders(self) -> AsyncFoldersResource:
+        """Folder management endpoints (API key required)"""
         from .resources.folders import AsyncFoldersResource
 
         return AsyncFoldersResource(self)
@@ -326,29 +314,12 @@ class AsyncAutorender(AsyncAPIClient):
 
     @property
     @override
-    def auth_headers(self) -> dict[str, str]:
-        api_key = self.api_key
-        if api_key is None:
-            return {}
-        return {"Authorization": f"Bearer {api_key}"}
-
-    @property
-    @override
     def default_headers(self) -> dict[str, str | Omit]:
         return {
             **super().default_headers,
             "X-Stainless-Async": f"async:{get_async_library()}",
             **self._custom_headers,
         }
-
-    @override
-    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
-        if headers.get("Authorization") or isinstance(custom_headers.get("Authorization"), Omit):
-            return
-
-        raise TypeError(
-            '"Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted"'
-        )
 
     def copy(
         self,
@@ -443,18 +414,21 @@ class AutorenderWithRawResponse:
 
     @cached_property
     def uploads(self) -> uploads.UploadsResourceWithRawResponse:
+        """Upload endpoints (API key required)"""
         from .resources.uploads import UploadsResourceWithRawResponse
 
         return UploadsResourceWithRawResponse(self._client.uploads)
 
     @cached_property
     def files(self) -> files.FilesResourceWithRawResponse:
+        """File management endpoints (API key required)"""
         from .resources.files import FilesResourceWithRawResponse
 
         return FilesResourceWithRawResponse(self._client.files)
 
     @cached_property
     def folders(self) -> folders.FoldersResourceWithRawResponse:
+        """Folder management endpoints (API key required)"""
         from .resources.folders import FoldersResourceWithRawResponse
 
         return FoldersResourceWithRawResponse(self._client.folders)
@@ -468,18 +442,21 @@ class AsyncAutorenderWithRawResponse:
 
     @cached_property
     def uploads(self) -> uploads.AsyncUploadsResourceWithRawResponse:
+        """Upload endpoints (API key required)"""
         from .resources.uploads import AsyncUploadsResourceWithRawResponse
 
         return AsyncUploadsResourceWithRawResponse(self._client.uploads)
 
     @cached_property
     def files(self) -> files.AsyncFilesResourceWithRawResponse:
+        """File management endpoints (API key required)"""
         from .resources.files import AsyncFilesResourceWithRawResponse
 
         return AsyncFilesResourceWithRawResponse(self._client.files)
 
     @cached_property
     def folders(self) -> folders.AsyncFoldersResourceWithRawResponse:
+        """Folder management endpoints (API key required)"""
         from .resources.folders import AsyncFoldersResourceWithRawResponse
 
         return AsyncFoldersResourceWithRawResponse(self._client.folders)
@@ -493,18 +470,21 @@ class AutorenderWithStreamedResponse:
 
     @cached_property
     def uploads(self) -> uploads.UploadsResourceWithStreamingResponse:
+        """Upload endpoints (API key required)"""
         from .resources.uploads import UploadsResourceWithStreamingResponse
 
         return UploadsResourceWithStreamingResponse(self._client.uploads)
 
     @cached_property
     def files(self) -> files.FilesResourceWithStreamingResponse:
+        """File management endpoints (API key required)"""
         from .resources.files import FilesResourceWithStreamingResponse
 
         return FilesResourceWithStreamingResponse(self._client.files)
 
     @cached_property
     def folders(self) -> folders.FoldersResourceWithStreamingResponse:
+        """Folder management endpoints (API key required)"""
         from .resources.folders import FoldersResourceWithStreamingResponse
 
         return FoldersResourceWithStreamingResponse(self._client.folders)
@@ -518,18 +498,21 @@ class AsyncAutorenderWithStreamedResponse:
 
     @cached_property
     def uploads(self) -> uploads.AsyncUploadsResourceWithStreamingResponse:
+        """Upload endpoints (API key required)"""
         from .resources.uploads import AsyncUploadsResourceWithStreamingResponse
 
         return AsyncUploadsResourceWithStreamingResponse(self._client.uploads)
 
     @cached_property
     def files(self) -> files.AsyncFilesResourceWithStreamingResponse:
+        """File management endpoints (API key required)"""
         from .resources.files import AsyncFilesResourceWithStreamingResponse
 
         return AsyncFilesResourceWithStreamingResponse(self._client.files)
 
     @cached_property
     def folders(self) -> folders.AsyncFoldersResourceWithStreamingResponse:
+        """Folder management endpoints (API key required)"""
         from .resources.folders import AsyncFoldersResourceWithStreamingResponse
 
         return AsyncFoldersResourceWithStreamingResponse(self._client.folders)

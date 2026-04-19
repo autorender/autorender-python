@@ -7,7 +7,7 @@ from typing_extensions import Literal
 import httpx
 
 from ..types import file_list_params, file_rename_params
-from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
 from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -18,15 +18,16 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.file_object import FileObject
 from ..types.file_list_response import FileListResponse
-from ..types.file_delete_response import FileDeleteResponse
 from ..types.file_rename_response import FileRenameResponse
+from ..types.file_retrieve_response import FileRetrieveResponse
 
 __all__ = ["FilesResource", "AsyncFilesResource"]
 
 
 class FilesResource(SyncAPIResource):
+    """File management endpoints (API key required)"""
+
     @cached_property
     def with_raw_response(self) -> FilesResourceWithRawResponse:
         """
@@ -56,9 +57,9 @@ class FilesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FileObject:
+    ) -> FileRetrieveResponse:
         """
-        Retrieve detailed information about a file by numeric file id (`file_no`).
+        Get file details
 
         Args:
           extra_headers: Send extra headers
@@ -76,7 +77,7 @@ class FilesResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FileObject,
+            cast_to=FileRetrieveResponse,
         )
 
     def list(
@@ -87,8 +88,7 @@ class FilesResource(SyncAPIResource):
         name: str | Omit = omit,
         page: int | Omit = omit,
         path: str | Omit = omit,
-        sort_field: Literal["file_size", "name", "created_at", "updated_at"] | Omit = omit,
-        sort_order: Literal["asc", "desc"] | Omit = omit,
+        sort: Literal["created_at_asc", "created_at_desc", "size_asc", "size_desc"] | Omit = omit,
         tags: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -97,27 +97,17 @@ class FilesResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FileListResponse:
-        """Paginated list of files in the workspace.
-
-        Filter by folder, sort by field and
-        order, and page through results.
+        """
+        List/search files with pagination, filtering, and sorting.
 
         Args:
-          folder_no: Restrict results to files in this folder (folder number)
+          folder_no: Exact folder number
 
-          limit: Items per page
+          name: Partial name match (case-insensitive)
 
-          name: Filter by filename (partial match, if supported)
+          path: Folder prefix (e.g. products/sku123/)
 
-          page: Page number (1-based)
-
-          path: Filter by path prefix (if supported)
-
-          sort_field: Field to sort by
-
-          sort_order: Sort direction
-
-          tags: Comma-separated tags (if supported)
+          tags: Comma-separated tags
 
           extra_headers: Send extra headers
 
@@ -141,8 +131,7 @@ class FilesResource(SyncAPIResource):
                         "name": name,
                         "page": page,
                         "path": path,
-                        "sort_field": sort_field,
-                        "sort_order": sort_order,
+                        "sort": sort,
                         "tags": tags,
                     },
                     file_list_params.FileListParams,
@@ -161,10 +150,9 @@ class FilesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FileDeleteResponse:
-        """Permanently delete a file.
-
-        No request body is required.
+    ) -> None:
+        """
+        Delete file
 
         Args:
           extra_headers: Send extra headers
@@ -177,12 +165,13 @@ class FilesResource(SyncAPIResource):
         """
         if not file_no:
             raise ValueError(f"Expected a non-empty value for `file_no` but received {file_no!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
             path_template("/api/v1/files/{file_no}", file_no=file_no),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FileDeleteResponse,
+            cast_to=NoneType,
         )
 
     def rename(
@@ -197,13 +186,11 @@ class FilesResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FileRenameResponse:
-        """Rename a file.
-
-        The API may preserve or normalize the file extension (e.g. `demo`
-        → `demo.png`).
+        """
+        Rename file
 
         Args:
-          name: New base name; extension may be applied by the server
+          name: New file name without extension or path separators
 
           extra_headers: Send extra headers
 
@@ -226,6 +213,8 @@ class FilesResource(SyncAPIResource):
 
 
 class AsyncFilesResource(AsyncAPIResource):
+    """File management endpoints (API key required)"""
+
     @cached_property
     def with_raw_response(self) -> AsyncFilesResourceWithRawResponse:
         """
@@ -255,9 +244,9 @@ class AsyncFilesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FileObject:
+    ) -> FileRetrieveResponse:
         """
-        Retrieve detailed information about a file by numeric file id (`file_no`).
+        Get file details
 
         Args:
           extra_headers: Send extra headers
@@ -275,7 +264,7 @@ class AsyncFilesResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FileObject,
+            cast_to=FileRetrieveResponse,
         )
 
     async def list(
@@ -286,8 +275,7 @@ class AsyncFilesResource(AsyncAPIResource):
         name: str | Omit = omit,
         page: int | Omit = omit,
         path: str | Omit = omit,
-        sort_field: Literal["file_size", "name", "created_at", "updated_at"] | Omit = omit,
-        sort_order: Literal["asc", "desc"] | Omit = omit,
+        sort: Literal["created_at_asc", "created_at_desc", "size_asc", "size_desc"] | Omit = omit,
         tags: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -296,27 +284,17 @@ class AsyncFilesResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FileListResponse:
-        """Paginated list of files in the workspace.
-
-        Filter by folder, sort by field and
-        order, and page through results.
+        """
+        List/search files with pagination, filtering, and sorting.
 
         Args:
-          folder_no: Restrict results to files in this folder (folder number)
+          folder_no: Exact folder number
 
-          limit: Items per page
+          name: Partial name match (case-insensitive)
 
-          name: Filter by filename (partial match, if supported)
+          path: Folder prefix (e.g. products/sku123/)
 
-          page: Page number (1-based)
-
-          path: Filter by path prefix (if supported)
-
-          sort_field: Field to sort by
-
-          sort_order: Sort direction
-
-          tags: Comma-separated tags (if supported)
+          tags: Comma-separated tags
 
           extra_headers: Send extra headers
 
@@ -340,8 +318,7 @@ class AsyncFilesResource(AsyncAPIResource):
                         "name": name,
                         "page": page,
                         "path": path,
-                        "sort_field": sort_field,
-                        "sort_order": sort_order,
+                        "sort": sort,
                         "tags": tags,
                     },
                     file_list_params.FileListParams,
@@ -360,10 +337,9 @@ class AsyncFilesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FileDeleteResponse:
-        """Permanently delete a file.
-
-        No request body is required.
+    ) -> None:
+        """
+        Delete file
 
         Args:
           extra_headers: Send extra headers
@@ -376,12 +352,13 @@ class AsyncFilesResource(AsyncAPIResource):
         """
         if not file_no:
             raise ValueError(f"Expected a non-empty value for `file_no` but received {file_no!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
             path_template("/api/v1/files/{file_no}", file_no=file_no),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FileDeleteResponse,
+            cast_to=NoneType,
         )
 
     async def rename(
@@ -396,13 +373,11 @@ class AsyncFilesResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FileRenameResponse:
-        """Rename a file.
-
-        The API may preserve or normalize the file extension (e.g. `demo`
-        → `demo.png`).
+        """
+        Rename file
 
         Args:
-          name: New base name; extension may be applied by the server
+          name: New file name without extension or path separators
 
           extra_headers: Send extra headers
 

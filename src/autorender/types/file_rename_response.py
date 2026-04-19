@@ -1,60 +1,53 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 from datetime import datetime
+from typing_extensions import Literal
 
 from .._models import BaseModel
 
-__all__ = ["FileRenameResponse"]
+__all__ = ["FileRenameResponse", "Data"]
 
 
-class FileRenameResponse(BaseModel):
-    """Updated file record after rename"""
+class Data(BaseModel):
+    id: str
 
-    id: Optional[str] = None
+    created_at: datetime
 
-    created_at: Optional[datetime] = None
+    file_no: str
 
-    created_by: Optional[str] = None
+    folder_name: Optional[str] = None
 
-    extension: Optional[str] = None
-
-    file_no: Optional[str] = None
-
-    file_size: Optional[int] = None
-
-    folder_id: Optional[str] = None
+    folder_no: Optional[str] = None
 
     format: Optional[str] = None
 
     height: Optional[int] = None
 
-    is_active: Optional[bool] = None
+    metadata: Optional[Dict[str, object]] = None
 
-    is_default: Optional[bool] = None
+    mime_type: str
 
-    is_delete: Optional[bool] = None
+    name: str
 
-    meta_data: Optional[Dict[str, object]] = None
+    path: str
 
-    name: Optional[str] = None
+    size: int
 
-    orientation: Optional[str] = None
+    source: str
 
-    original_url: Optional[str] = None
-
-    path: Optional[str] = None
-
-    source: Optional[str] = None
-
-    transform_string: Optional[str] = None
+    tags: List[str]
 
     updated_at: Optional[datetime] = None
 
-    url: Optional[str] = None
+    url: str
 
     width: Optional[int] = None
 
-    workspace_id: Optional[str] = None
 
-    workspace_no: Optional[str] = None
+class FileRenameResponse(BaseModel):
+    """Renamed file"""
+
+    data: Data
+
+    success: Literal[True]

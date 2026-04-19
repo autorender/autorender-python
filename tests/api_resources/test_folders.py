@@ -9,12 +9,7 @@ import pytest
 
 from autorender import Autorender, AsyncAutorender
 from tests.utils import assert_matches_type
-from autorender.types import (
-    Folder,
-    FolderListResponse,
-    FolderCreateResponse,
-    FolderDeleteResponse,
-)
+from autorender.types import FolderCreateResponse, FolderRenameResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -25,22 +20,22 @@ class TestFolders:
     @parametrize
     def test_method_create(self, client: Autorender) -> None:
         folder = client.folders.create(
-            name="demo2",
+            folder_name="folder_name",
         )
         assert_matches_type(FolderCreateResponse, folder, path=["response"])
 
     @parametrize
     def test_method_create_with_all_params(self, client: Autorender) -> None:
         folder = client.folders.create(
-            name="demo2",
-            parent_folder_no="sD1LvqoDzG",
+            folder_name="folder_name",
+            path="path",
         )
         assert_matches_type(FolderCreateResponse, folder, path=["response"])
 
     @parametrize
     def test_raw_response_create(self, client: Autorender) -> None:
         response = client.folders.with_raw_response.create(
-            name="demo2",
+            folder_name="folder_name",
         )
 
         assert response.is_closed is True
@@ -51,7 +46,7 @@ class TestFolders:
     @parametrize
     def test_streaming_response_create(self, client: Autorender) -> None:
         with client.folders.with_streaming_response.create(
-            name="demo2",
+            folder_name="folder_name",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -62,65 +57,33 @@ class TestFolders:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
-    def test_method_list(self, client: Autorender) -> None:
-        folder = client.folders.list()
-        assert_matches_type(FolderListResponse, folder, path=["response"])
-
-    @parametrize
-    def test_method_list_with_all_params(self, client: Autorender) -> None:
-        folder = client.folders.list(
-            parent_folder_no="sD1LvqoDzG",
-        )
-        assert_matches_type(FolderListResponse, folder, path=["response"])
-
-    @parametrize
-    def test_raw_response_list(self, client: Autorender) -> None:
-        response = client.folders.with_raw_response.list()
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        folder = response.parse()
-        assert_matches_type(FolderListResponse, folder, path=["response"])
-
-    @parametrize
-    def test_streaming_response_list(self, client: Autorender) -> None:
-        with client.folders.with_streaming_response.list() as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            folder = response.parse()
-            assert_matches_type(FolderListResponse, folder, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @parametrize
     def test_method_delete(self, client: Autorender) -> None:
         folder = client.folders.delete(
-            "my8JeLg4tr",
+            "folderNo",
         )
-        assert_matches_type(FolderDeleteResponse, folder, path=["response"])
+        assert folder is None
 
     @parametrize
     def test_raw_response_delete(self, client: Autorender) -> None:
         response = client.folders.with_raw_response.delete(
-            "my8JeLg4tr",
+            "folderNo",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         folder = response.parse()
-        assert_matches_type(FolderDeleteResponse, folder, path=["response"])
+        assert folder is None
 
     @parametrize
     def test_streaming_response_delete(self, client: Autorender) -> None:
         with client.folders.with_streaming_response.delete(
-            "my8JeLg4tr",
+            "folderNo",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             folder = response.parse()
-            assert_matches_type(FolderDeleteResponse, folder, path=["response"])
+            assert folder is None
 
         assert cast(Any, response.is_closed) is True
 
@@ -134,34 +97,34 @@ class TestFolders:
     @parametrize
     def test_method_rename(self, client: Autorender) -> None:
         folder = client.folders.rename(
-            folder_no="53855hxPoq",
-            name="demo2",
+            folder_no="folderNo",
+            name="name",
         )
-        assert_matches_type(Folder, folder, path=["response"])
+        assert_matches_type(FolderRenameResponse, folder, path=["response"])
 
     @parametrize
     def test_raw_response_rename(self, client: Autorender) -> None:
         response = client.folders.with_raw_response.rename(
-            folder_no="53855hxPoq",
-            name="demo2",
+            folder_no="folderNo",
+            name="name",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         folder = response.parse()
-        assert_matches_type(Folder, folder, path=["response"])
+        assert_matches_type(FolderRenameResponse, folder, path=["response"])
 
     @parametrize
     def test_streaming_response_rename(self, client: Autorender) -> None:
         with client.folders.with_streaming_response.rename(
-            folder_no="53855hxPoq",
-            name="demo2",
+            folder_no="folderNo",
+            name="name",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             folder = response.parse()
-            assert_matches_type(Folder, folder, path=["response"])
+            assert_matches_type(FolderRenameResponse, folder, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -170,7 +133,7 @@ class TestFolders:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `folder_no` but received ''"):
             client.folders.with_raw_response.rename(
                 folder_no="",
-                name="demo2",
+                name="name",
             )
 
 
@@ -182,22 +145,22 @@ class TestAsyncFolders:
     @parametrize
     async def test_method_create(self, async_client: AsyncAutorender) -> None:
         folder = await async_client.folders.create(
-            name="demo2",
+            folder_name="folder_name",
         )
         assert_matches_type(FolderCreateResponse, folder, path=["response"])
 
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncAutorender) -> None:
         folder = await async_client.folders.create(
-            name="demo2",
-            parent_folder_no="sD1LvqoDzG",
+            folder_name="folder_name",
+            path="path",
         )
         assert_matches_type(FolderCreateResponse, folder, path=["response"])
 
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncAutorender) -> None:
         response = await async_client.folders.with_raw_response.create(
-            name="demo2",
+            folder_name="folder_name",
         )
 
         assert response.is_closed is True
@@ -208,7 +171,7 @@ class TestAsyncFolders:
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncAutorender) -> None:
         async with async_client.folders.with_streaming_response.create(
-            name="demo2",
+            folder_name="folder_name",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -219,65 +182,33 @@ class TestAsyncFolders:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
-    async def test_method_list(self, async_client: AsyncAutorender) -> None:
-        folder = await async_client.folders.list()
-        assert_matches_type(FolderListResponse, folder, path=["response"])
-
-    @parametrize
-    async def test_method_list_with_all_params(self, async_client: AsyncAutorender) -> None:
-        folder = await async_client.folders.list(
-            parent_folder_no="sD1LvqoDzG",
-        )
-        assert_matches_type(FolderListResponse, folder, path=["response"])
-
-    @parametrize
-    async def test_raw_response_list(self, async_client: AsyncAutorender) -> None:
-        response = await async_client.folders.with_raw_response.list()
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        folder = await response.parse()
-        assert_matches_type(FolderListResponse, folder, path=["response"])
-
-    @parametrize
-    async def test_streaming_response_list(self, async_client: AsyncAutorender) -> None:
-        async with async_client.folders.with_streaming_response.list() as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            folder = await response.parse()
-            assert_matches_type(FolderListResponse, folder, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @parametrize
     async def test_method_delete(self, async_client: AsyncAutorender) -> None:
         folder = await async_client.folders.delete(
-            "my8JeLg4tr",
+            "folderNo",
         )
-        assert_matches_type(FolderDeleteResponse, folder, path=["response"])
+        assert folder is None
 
     @parametrize
     async def test_raw_response_delete(self, async_client: AsyncAutorender) -> None:
         response = await async_client.folders.with_raw_response.delete(
-            "my8JeLg4tr",
+            "folderNo",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         folder = await response.parse()
-        assert_matches_type(FolderDeleteResponse, folder, path=["response"])
+        assert folder is None
 
     @parametrize
     async def test_streaming_response_delete(self, async_client: AsyncAutorender) -> None:
         async with async_client.folders.with_streaming_response.delete(
-            "my8JeLg4tr",
+            "folderNo",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             folder = await response.parse()
-            assert_matches_type(FolderDeleteResponse, folder, path=["response"])
+            assert folder is None
 
         assert cast(Any, response.is_closed) is True
 
@@ -291,34 +222,34 @@ class TestAsyncFolders:
     @parametrize
     async def test_method_rename(self, async_client: AsyncAutorender) -> None:
         folder = await async_client.folders.rename(
-            folder_no="53855hxPoq",
-            name="demo2",
+            folder_no="folderNo",
+            name="name",
         )
-        assert_matches_type(Folder, folder, path=["response"])
+        assert_matches_type(FolderRenameResponse, folder, path=["response"])
 
     @parametrize
     async def test_raw_response_rename(self, async_client: AsyncAutorender) -> None:
         response = await async_client.folders.with_raw_response.rename(
-            folder_no="53855hxPoq",
-            name="demo2",
+            folder_no="folderNo",
+            name="name",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         folder = await response.parse()
-        assert_matches_type(Folder, folder, path=["response"])
+        assert_matches_type(FolderRenameResponse, folder, path=["response"])
 
     @parametrize
     async def test_streaming_response_rename(self, async_client: AsyncAutorender) -> None:
         async with async_client.folders.with_streaming_response.rename(
-            folder_no="53855hxPoq",
-            name="demo2",
+            folder_no="folderNo",
+            name="name",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             folder = await response.parse()
-            assert_matches_type(Folder, folder, path=["response"])
+            assert_matches_type(FolderRenameResponse, folder, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -327,5 +258,5 @@ class TestAsyncFolders:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `folder_no` but received ''"):
             await async_client.folders.with_raw_response.rename(
                 folder_no="",
-                name="demo2",
+                name="name",
             )

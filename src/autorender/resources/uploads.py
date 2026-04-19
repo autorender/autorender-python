@@ -19,12 +19,15 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.upload import Upload
+from ..types.upload_create_response import UploadCreateResponse
+from ..types.upload_create_from_url_response import UploadCreateFromURLResponse
 
 __all__ = ["UploadsResource", "AsyncUploadsResource"]
 
 
 class UploadsResource(SyncAPIResource):
+    """Upload endpoints (API key required)"""
+
     @cached_property
     def with_raw_response(self) -> UploadsResourceWithRawResponse:
         """
@@ -55,33 +58,35 @@ class UploadsResource(SyncAPIResource):
         random_prefix: str | Omit = omit,
         tags: str | Omit = omit,
         transform: str | Omit = omit,
+        webhook_url: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> Upload:
+    ) -> UploadCreateResponse:
         """
-        Upload a file to your AutoRender workspace with optional transformations, tags,
-        and folder organization
+        Upload a file from your backend server using multipart/form-data.
 
         Args:
-          file: The file to upload (binary data)
+          file: File to upload.
 
-          file_name: File name for the uploaded file (e.g., my-image.jpg)
+          file_name: File name (e.g. product.jpg)
 
-          custom_id: Custom identifier for the file
+          custom_id: Custom identifier
 
-          folder: Folder path where the file will be stored (e.g., uploads/my-folder)
+          folder: Optional folder path
 
-          metadata: JSON string for custom metadata (e.g., {"key": "value"})
+          metadata: JSON string of metadata
 
-          random_prefix: Set to "true" to add a random suffix to filename
+          random_prefix: true/false to append random suffix
 
-          tags: Comma-separated tags (e.g., tag1,tag2,tag3)
+          tags: Comma-separated tags
 
-          transform: Image transformation string (e.g., w_800,h_600,q_90)
+          transform: Transform string (w_300,h_300,c_crop,...)
+
+          webhook_url: URL to notify on success
 
           extra_headers: Send extra headers
 
@@ -101,6 +106,7 @@ class UploadsResource(SyncAPIResource):
                 "random_prefix": random_prefix,
                 "tags": tags,
                 "transform": transform,
+                "webhook_url": webhook_url,
             },
             [["file"]],
         )
@@ -116,7 +122,7 @@ class UploadsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Upload,
+            cast_to=UploadCreateResponse,
         )
 
     def create_from_url(
@@ -124,11 +130,11 @@ class UploadsResource(SyncAPIResource):
         *,
         remote_url: str,
         custom_id: str | Omit = omit,
+        file_name: str | Omit = omit,
         folder: str | Omit = omit,
         metadata: str | Omit = omit,
         random_prefix: str | Omit = omit,
         tags: str | Omit = omit,
-        transform: str | Omit = omit,
         webhook_url: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -136,26 +142,22 @@ class UploadsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> Upload:
+    ) -> UploadCreateFromURLResponse:
         """
-        Fetch a file from a remote URL and store it in your AutoRender workspace.
+        Download a file from a remote URL and store it in AutoRender.
 
         Args:
-          remote_url: The HTTP or HTTPS URL of the image to download
+          remote_url: HTTP/HTTPS URL to fetch
 
-          custom_id: Custom identifier for tracking the upload
+          file_name: Override file name
 
-          folder: Folder path where the file should be stored
+          folder: Destination folder path
 
-          metadata: JSON string containing custom metadata object
+          metadata: JSON string of metadata object
 
-          random_prefix: Set to 'true' to generate a random suffix for the filename
+          random_prefix: true/false to append random suffix
 
-          tags: Comma-separated list of tags to apply to the file
-
-          transform: Transformation string to apply during upload (e.g., w_800,h_600,c_crop)
-
-          webhook_url: URL to receive webhook notification when upload completes
+          tags: Comma-separated tags
 
           extra_headers: Send extra headers
 
@@ -171,11 +173,11 @@ class UploadsResource(SyncAPIResource):
                 {
                     "remote_url": remote_url,
                     "custom_id": custom_id,
+                    "file_name": file_name,
                     "folder": folder,
                     "metadata": metadata,
                     "random_prefix": random_prefix,
                     "tags": tags,
-                    "transform": transform,
                     "webhook_url": webhook_url,
                 },
                 upload_create_from_url_params.UploadCreateFromURLParams,
@@ -183,11 +185,13 @@ class UploadsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Upload,
+            cast_to=UploadCreateFromURLResponse,
         )
 
 
 class AsyncUploadsResource(AsyncAPIResource):
+    """Upload endpoints (API key required)"""
+
     @cached_property
     def with_raw_response(self) -> AsyncUploadsResourceWithRawResponse:
         """
@@ -218,33 +222,35 @@ class AsyncUploadsResource(AsyncAPIResource):
         random_prefix: str | Omit = omit,
         tags: str | Omit = omit,
         transform: str | Omit = omit,
+        webhook_url: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> Upload:
+    ) -> UploadCreateResponse:
         """
-        Upload a file to your AutoRender workspace with optional transformations, tags,
-        and folder organization
+        Upload a file from your backend server using multipart/form-data.
 
         Args:
-          file: The file to upload (binary data)
+          file: File to upload.
 
-          file_name: File name for the uploaded file (e.g., my-image.jpg)
+          file_name: File name (e.g. product.jpg)
 
-          custom_id: Custom identifier for the file
+          custom_id: Custom identifier
 
-          folder: Folder path where the file will be stored (e.g., uploads/my-folder)
+          folder: Optional folder path
 
-          metadata: JSON string for custom metadata (e.g., {"key": "value"})
+          metadata: JSON string of metadata
 
-          random_prefix: Set to "true" to add a random suffix to filename
+          random_prefix: true/false to append random suffix
 
-          tags: Comma-separated tags (e.g., tag1,tag2,tag3)
+          tags: Comma-separated tags
 
-          transform: Image transformation string (e.g., w_800,h_600,q_90)
+          transform: Transform string (w_300,h_300,c_crop,...)
+
+          webhook_url: URL to notify on success
 
           extra_headers: Send extra headers
 
@@ -264,6 +270,7 @@ class AsyncUploadsResource(AsyncAPIResource):
                 "random_prefix": random_prefix,
                 "tags": tags,
                 "transform": transform,
+                "webhook_url": webhook_url,
             },
             [["file"]],
         )
@@ -279,7 +286,7 @@ class AsyncUploadsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Upload,
+            cast_to=UploadCreateResponse,
         )
 
     async def create_from_url(
@@ -287,11 +294,11 @@ class AsyncUploadsResource(AsyncAPIResource):
         *,
         remote_url: str,
         custom_id: str | Omit = omit,
+        file_name: str | Omit = omit,
         folder: str | Omit = omit,
         metadata: str | Omit = omit,
         random_prefix: str | Omit = omit,
         tags: str | Omit = omit,
-        transform: str | Omit = omit,
         webhook_url: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -299,26 +306,22 @@ class AsyncUploadsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> Upload:
+    ) -> UploadCreateFromURLResponse:
         """
-        Fetch a file from a remote URL and store it in your AutoRender workspace.
+        Download a file from a remote URL and store it in AutoRender.
 
         Args:
-          remote_url: The HTTP or HTTPS URL of the image to download
+          remote_url: HTTP/HTTPS URL to fetch
 
-          custom_id: Custom identifier for tracking the upload
+          file_name: Override file name
 
-          folder: Folder path where the file should be stored
+          folder: Destination folder path
 
-          metadata: JSON string containing custom metadata object
+          metadata: JSON string of metadata object
 
-          random_prefix: Set to 'true' to generate a random suffix for the filename
+          random_prefix: true/false to append random suffix
 
-          tags: Comma-separated list of tags to apply to the file
-
-          transform: Transformation string to apply during upload (e.g., w_800,h_600,c_crop)
-
-          webhook_url: URL to receive webhook notification when upload completes
+          tags: Comma-separated tags
 
           extra_headers: Send extra headers
 
@@ -334,11 +337,11 @@ class AsyncUploadsResource(AsyncAPIResource):
                 {
                     "remote_url": remote_url,
                     "custom_id": custom_id,
+                    "file_name": file_name,
                     "folder": folder,
                     "metadata": metadata,
                     "random_prefix": random_prefix,
                     "tags": tags,
-                    "transform": transform,
                     "webhook_url": webhook_url,
                 },
                 upload_create_from_url_params.UploadCreateFromURLParams,
@@ -346,7 +349,7 @@ class AsyncUploadsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Upload,
+            cast_to=UploadCreateFromURLResponse,
         )
 
 
