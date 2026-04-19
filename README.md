@@ -166,8 +166,8 @@ client = Autorender()
 
 try:
     client.uploads.create(
-        file=b"Example data",
-        file_name="product.jpg",
+        file=b"<binary>",
+        file_name="photo.jpg",
     )
 except autorender.APIConnectionError as e:
     print("The server could not be reached")
@@ -212,8 +212,8 @@ client = Autorender(
 
 # Or, configure per-request:
 client.with_options(max_retries=5).uploads.create(
-    file=b"Example data",
-    file_name="product.jpg",
+    file=b"<binary>",
+    file_name="photo.jpg",
 )
 ```
 
@@ -238,8 +238,8 @@ client = Autorender(
 
 # Override per-request:
 client.with_options(timeout=5.0).uploads.create(
-    file=b"Example data",
-    file_name="product.jpg",
+    file=b"<binary>",
+    file_name="photo.jpg",
 )
 ```
 
@@ -282,8 +282,8 @@ from autorender import Autorender
 
 client = Autorender()
 response = client.uploads.with_raw_response.create(
-    file=b"Example data",
-    file_name="product.jpg",
+    file=b"<binary>",
+    file_name="photo.jpg",
 )
 print(response.headers.get('X-My-Header'))
 
@@ -303,8 +303,8 @@ To stream the response body, use `.with_streaming_response` instead, which requi
 
 ```python
 with client.uploads.with_streaming_response.create(
-    file=b"Example data",
-    file_name="product.jpg",
+    file=b"<binary>",
+    file_name="photo.jpg",
 ) as response:
     print(response.headers.get("X-My-Header"))
 

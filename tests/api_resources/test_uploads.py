@@ -169,7 +169,7 @@ class TestUploads:
     def test_method_upload_with_token(self, client: Autorender) -> None:
         upload = client.uploads.upload_with_token(
             token="token",
-            body=b"Example data",
+            file=b"Example data",
         )
         assert_matches_type(UploadUploadWithTokenResponse, upload, path=["response"])
 
@@ -177,7 +177,7 @@ class TestUploads:
     def test_raw_response_upload_with_token(self, client: Autorender) -> None:
         response = client.uploads.with_raw_response.upload_with_token(
             token="token",
-            body=b"Example data",
+            file=b"Example data",
         )
 
         assert response.is_closed is True
@@ -189,7 +189,7 @@ class TestUploads:
     def test_streaming_response_upload_with_token(self, client: Autorender) -> None:
         with client.uploads.with_streaming_response.upload_with_token(
             token="token",
-            body=b"Example data",
+            file=b"Example data",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -204,7 +204,7 @@ class TestUploads:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `token` but received ''"):
             client.uploads.with_raw_response.upload_with_token(
                 token="",
-                body=b"Example data",
+                file=b"Example data",
             )
 
 
@@ -360,7 +360,7 @@ class TestAsyncUploads:
     async def test_method_upload_with_token(self, async_client: AsyncAutorender) -> None:
         upload = await async_client.uploads.upload_with_token(
             token="token",
-            body=b"Example data",
+            file=b"Example data",
         )
         assert_matches_type(UploadUploadWithTokenResponse, upload, path=["response"])
 
@@ -368,7 +368,7 @@ class TestAsyncUploads:
     async def test_raw_response_upload_with_token(self, async_client: AsyncAutorender) -> None:
         response = await async_client.uploads.with_raw_response.upload_with_token(
             token="token",
-            body=b"Example data",
+            file=b"Example data",
         )
 
         assert response.is_closed is True
@@ -380,7 +380,7 @@ class TestAsyncUploads:
     async def test_streaming_response_upload_with_token(self, async_client: AsyncAutorender) -> None:
         async with async_client.uploads.with_streaming_response.upload_with_token(
             token="token",
-            body=b"Example data",
+            file=b"Example data",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -395,5 +395,5 @@ class TestAsyncUploads:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `token` but received ''"):
             await async_client.uploads.with_raw_response.upload_with_token(
                 token="",
-                body=b"Example data",
+                file=b"Example data",
             )
