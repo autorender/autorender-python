@@ -5,7 +5,9 @@ from __future__ import annotations
 from .file_list_params import FileListParams as FileListParams
 from .file_list_response import FileListResponse as FileListResponse
 from .file_rename_params import FileRenameParams as FileRenameParams
+from .file_update_params import FileUpdateParams as FileUpdateParams
 from .file_rename_response import FileRenameResponse as FileRenameResponse
+from .file_update_response import FileUpdateResponse as FileUpdateResponse
 from .folder_create_params import FolderCreateParams as FolderCreateParams
 from .folder_rename_params import FolderRenameParams as FolderRenameParams
 from .upload_create_params import UploadCreateParams as UploadCreateParams
@@ -13,5 +15,9 @@ from .file_retrieve_response import FileRetrieveResponse as FileRetrieveResponse
 from .folder_create_response import FolderCreateResponse as FolderCreateResponse
 from .folder_rename_response import FolderRenameResponse as FolderRenameResponse
 from .upload_create_response import UploadCreateResponse as UploadCreateResponse
+from .upload_generate_token_params import UploadGenerateTokenParams as UploadGenerateTokenParams
 from .upload_create_from_url_params import UploadCreateFromURLParams as UploadCreateFromURLParams
+from .upload_generate_token_response import UploadGenerateTokenResponse as UploadGenerateTokenResponse
 from .upload_create_from_url_response import UploadCreateFromURLResponse as UploadCreateFromURLResponse
+from .upload_upload_with_token_params import UploadUploadWithTokenParams as UploadUploadWithTokenParams
+from .upload_upload_with_token_response import UploadUploadWithTokenResponse as UploadUploadWithTokenResponse

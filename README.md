@@ -25,32 +25,43 @@ pip install autorender-python
 The full API of this library can be found in [api.md](api.md).
 
 ```python
+import os
 from autorender import Autorender
 
-client = Autorender()
+client = Autorender(
+    api_key=os.environ.get("AUTORENDER_API_KEY"),  # This is the default and can be omitted
+)
 
 upload = client.uploads.create(
-    file=b"Example data",
-    file_name="product.jpg",
+    file=b"<binary>",
+    file_name="photo.jpg",
 )
 print(upload.id)
 ```
+
+While you can provide an `api_key` keyword argument,
+we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
+to add `AUTORENDER_API_KEY="My API Key"` to your `.env` file
+so that your API Key is not stored in source control.
 
 ## Async usage
 
 Simply import `AsyncAutorender` instead of `Autorender` and use `await` with each API call:
 
 ```python
+import os
 import asyncio
 from autorender import AsyncAutorender
 
-client = AsyncAutorender()
+client = AsyncAutorender(
+    api_key=os.environ.get("AUTORENDER_API_KEY"),  # This is the default and can be omitted
+)
 
 
 async def main() -> None:
     upload = await client.uploads.create(
-        file=b"Example data",
-        file_name="product.jpg",
+        file=b"<binary>",
+        file_name="photo.jpg",
     )
     print(upload.id)
 
@@ -74,6 +85,7 @@ pip install autorender-python[aiohttp]
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
 
 ```python
+import os
 import asyncio
 from autorender import DefaultAioHttpClient
 from autorender import AsyncAutorender
@@ -81,11 +93,12 @@ from autorender import AsyncAutorender
 
 async def main() -> None:
     async with AsyncAutorender(
+        api_key=os.environ.get("AUTORENDER_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
         upload = await client.uploads.create(
-            file=b"Example data",
-            file_name="product.jpg",
+            file=b"<binary>",
+            file_name="photo.jpg",
         )
         print(upload.id)
 
@@ -101,6 +114,22 @@ Nested request parameters are [TypedDicts](https://docs.python.org/3/library/typ
 - Converting to a dictionary, `model.to_dict()`
 
 Typed requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.
+
+## Nested params
+
+Nested parameters are dictionaries, typed using `TypedDict`, for example:
+
+```python
+from autorender import Autorender
+
+client = Autorender()
+
+response = client.uploads.generate_token(
+    file_name="file_name",
+    allow_override={},
+)
+print(response.allow_override)
+```
 
 ## File uploads
 

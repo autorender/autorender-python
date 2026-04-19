@@ -12,6 +12,7 @@ from . import _exceptions
 from ._qs import Querystring
 from ._types import (
     Omit,
+    Headers,
     Timeout,
     NotGiven,
     Transport,
@@ -135,12 +136,29 @@ class Autorender(SyncAPIClient):
 
     @property
     @override
+    def auth_headers(self) -> dict[str, str]:
+        api_key = self.api_key
+        if api_key is None:
+            return {}
+        return {"x-api-key": api_key}
+
+    @property
+    @override
     def default_headers(self) -> dict[str, str | Omit]:
         return {
             **super().default_headers,
             "X-Stainless-Async": "false",
             **self._custom_headers,
         }
+
+    @override
+    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
+        if headers.get("x-api-key") or isinstance(custom_headers.get("x-api-key"), Omit):
+            return
+
+        raise TypeError(
+            '"Could not resolve authentication method. Expected the api_key to be set. Or for the `x-api-key` headers to be explicitly omitted"'
+        )
 
     def copy(
         self,
@@ -314,12 +332,29 @@ class AsyncAutorender(AsyncAPIClient):
 
     @property
     @override
+    def auth_headers(self) -> dict[str, str]:
+        api_key = self.api_key
+        if api_key is None:
+            return {}
+        return {"x-api-key": api_key}
+
+    @property
+    @override
     def default_headers(self) -> dict[str, str | Omit]:
         return {
             **super().default_headers,
             "X-Stainless-Async": f"async:{get_async_library()}",
             **self._custom_headers,
         }
+
+    @override
+    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
+        if headers.get("x-api-key") or isinstance(custom_headers.get("x-api-key"), Omit):
+            return
+
+        raise TypeError(
+            '"Could not resolve authentication method. Expected the api_key to be set. Or for the `x-api-key` headers to be explicitly omitted"'
+        )
 
     def copy(
         self,

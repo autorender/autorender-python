@@ -2,14 +2,32 @@
 
 from __future__ import annotations
 
-from typing import Mapping, cast
+import os
+from typing import Dict, Mapping, cast
 
 import httpx
 
-from ..types import upload_create_params, upload_create_from_url_params
-from .._files import deepcopy_with_paths
-from .._types import Body, Omit, Query, Headers, NotGiven, FileTypes, omit, not_given
-from .._utils import extract_files, maybe_transform, async_maybe_transform
+from ..types import (
+    upload_create_params,
+    upload_generate_token_params,
+    upload_create_from_url_params,
+)
+from .._files import read_file_content, deepcopy_with_paths, async_read_file_content
+from .._types import (
+    Body,
+    Omit,
+    Query,
+    Headers,
+    NotGiven,
+    FileTypes,
+    BinaryTypes,
+    FileContent,
+    SequenceNotStr,
+    AsyncBinaryTypes,
+    omit,
+    not_given,
+)
+from .._utils import extract_files, path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -20,7 +38,9 @@ from .._response import (
 )
 from .._base_client import make_request_options
 from ..types.upload_create_response import UploadCreateResponse
+from ..types.upload_generate_token_response import UploadGenerateTokenResponse
 from ..types.upload_create_from_url_response import UploadCreateFromURLResponse
+from ..types.upload_upload_with_token_response import UploadUploadWithTokenResponse
 
 __all__ = ["UploadsResource", "AsyncUploadsResource"]
 
@@ -188,6 +208,109 @@ class UploadsResource(SyncAPIResource):
             cast_to=UploadCreateFromURLResponse,
         )
 
+    def generate_token(
+        self,
+        *,
+        file_name: str,
+        allow_override: upload_generate_token_params.AllowOverride | Omit = omit,
+        custom_id: str | Omit = omit,
+        folder: str | Omit = omit,
+        max_file_size: int | Omit = omit,
+        metadata: Dict[str, object] | Omit = omit,
+        random_prefix: bool | Omit = omit,
+        tags: SequenceNotStr[str] | Omit = omit,
+        ttl_seconds: int | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> UploadGenerateTokenResponse:
+        """Generate a short-lived token for direct browser uploads.
+
+        No file is created at
+        this stage.
+
+        Args:
+          file_name: File name for the uploaded file (e.g., avatar.jpg)
+
+          folder: Destination folder path
+
+          max_file_size: Max file size in bytes
+
+          ttl_seconds: Token lifetime in seconds. Defaults to 300.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._post(
+            "/api/v1/generate-token",
+            body=maybe_transform(
+                {
+                    "file_name": file_name,
+                    "allow_override": allow_override,
+                    "custom_id": custom_id,
+                    "folder": folder,
+                    "max_file_size": max_file_size,
+                    "metadata": metadata,
+                    "random_prefix": random_prefix,
+                    "tags": tags,
+                    "ttl_seconds": ttl_seconds,
+                },
+                upload_generate_token_params.UploadGenerateTokenParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=UploadGenerateTokenResponse,
+        )
+
+    def upload_with_token(
+        self,
+        token: str,
+        body: FileContent | BinaryTypes,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> UploadUploadWithTokenResponse:
+        """Upload a file directly from the browser using a token from /generate-token.
+
+        Send
+        the raw file as binary in the request body.
+
+        Args:
+          body: Raw file bytes. Accepts any file type (images, documents, videos, etc.).
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not token:
+            raise ValueError(f"Expected a non-empty value for `token` but received {token!r}")
+        extra_headers = {"Content-Type": "application/octet-stream", **(extra_headers or {})}
+        return self._post(
+            path_template("/api/v1/uploads/{token}", token=token),
+            content=read_file_content(body) if isinstance(body, os.PathLike) else body,
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=UploadUploadWithTokenResponse,
+        )
+
 
 class AsyncUploadsResource(AsyncAPIResource):
     """Upload endpoints (API key required)"""
@@ -352,6 +475,109 @@ class AsyncUploadsResource(AsyncAPIResource):
             cast_to=UploadCreateFromURLResponse,
         )
 
+    async def generate_token(
+        self,
+        *,
+        file_name: str,
+        allow_override: upload_generate_token_params.AllowOverride | Omit = omit,
+        custom_id: str | Omit = omit,
+        folder: str | Omit = omit,
+        max_file_size: int | Omit = omit,
+        metadata: Dict[str, object] | Omit = omit,
+        random_prefix: bool | Omit = omit,
+        tags: SequenceNotStr[str] | Omit = omit,
+        ttl_seconds: int | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> UploadGenerateTokenResponse:
+        """Generate a short-lived token for direct browser uploads.
+
+        No file is created at
+        this stage.
+
+        Args:
+          file_name: File name for the uploaded file (e.g., avatar.jpg)
+
+          folder: Destination folder path
+
+          max_file_size: Max file size in bytes
+
+          ttl_seconds: Token lifetime in seconds. Defaults to 300.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._post(
+            "/api/v1/generate-token",
+            body=await async_maybe_transform(
+                {
+                    "file_name": file_name,
+                    "allow_override": allow_override,
+                    "custom_id": custom_id,
+                    "folder": folder,
+                    "max_file_size": max_file_size,
+                    "metadata": metadata,
+                    "random_prefix": random_prefix,
+                    "tags": tags,
+                    "ttl_seconds": ttl_seconds,
+                },
+                upload_generate_token_params.UploadGenerateTokenParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=UploadGenerateTokenResponse,
+        )
+
+    async def upload_with_token(
+        self,
+        token: str,
+        body: FileContent | AsyncBinaryTypes,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> UploadUploadWithTokenResponse:
+        """Upload a file directly from the browser using a token from /generate-token.
+
+        Send
+        the raw file as binary in the request body.
+
+        Args:
+          body: Raw file bytes. Accepts any file type (images, documents, videos, etc.).
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not token:
+            raise ValueError(f"Expected a non-empty value for `token` but received {token!r}")
+        extra_headers = {"Content-Type": "application/octet-stream", **(extra_headers or {})}
+        return await self._post(
+            path_template("/api/v1/uploads/{token}", token=token),
+            content=await async_read_file_content(body) if isinstance(body, os.PathLike) else body,
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=UploadUploadWithTokenResponse,
+        )
+
 
 class UploadsResourceWithRawResponse:
     def __init__(self, uploads: UploadsResource) -> None:
@@ -362,6 +588,12 @@ class UploadsResourceWithRawResponse:
         )
         self.create_from_url = to_raw_response_wrapper(
             uploads.create_from_url,
+        )
+        self.generate_token = to_raw_response_wrapper(
+            uploads.generate_token,
+        )
+        self.upload_with_token = to_raw_response_wrapper(
+            uploads.upload_with_token,
         )
 
 
@@ -375,6 +607,12 @@ class AsyncUploadsResourceWithRawResponse:
         self.create_from_url = async_to_raw_response_wrapper(
             uploads.create_from_url,
         )
+        self.generate_token = async_to_raw_response_wrapper(
+            uploads.generate_token,
+        )
+        self.upload_with_token = async_to_raw_response_wrapper(
+            uploads.upload_with_token,
+        )
 
 
 class UploadsResourceWithStreamingResponse:
@@ -387,6 +625,12 @@ class UploadsResourceWithStreamingResponse:
         self.create_from_url = to_streamed_response_wrapper(
             uploads.create_from_url,
         )
+        self.generate_token = to_streamed_response_wrapper(
+            uploads.generate_token,
+        )
+        self.upload_with_token = to_streamed_response_wrapper(
+            uploads.upload_with_token,
+        )
 
 
 class AsyncUploadsResourceWithStreamingResponse:
@@ -398,4 +642,10 @@ class AsyncUploadsResourceWithStreamingResponse:
         )
         self.create_from_url = async_to_streamed_response_wrapper(
             uploads.create_from_url,
+        )
+        self.generate_token = async_to_streamed_response_wrapper(
+            uploads.generate_token,
+        )
+        self.upload_with_token = async_to_streamed_response_wrapper(
+            uploads.upload_with_token,
         )
