@@ -11,25 +11,28 @@ __all__ = ["UploadCreateParams"]
 
 class UploadCreateParams(TypedDict, total=False):
     file: Required[FileTypes]
-    """The file to upload (binary data)"""
+    """File to upload."""
 
     file_name: Required[str]
-    """File name for the uploaded file (e.g., my-image.jpg)"""
+    """File name (e.g. product.jpg)"""
 
     custom_id: str
-    """Custom identifier for the file"""
+    """Custom identifier"""
 
     folder: str
-    """Folder path where the file will be stored (e.g., uploads/my-folder)"""
+    """Optional folder path"""
 
     metadata: str
-    """JSON string for custom metadata (e.g., {"key": "value"})"""
+    """JSON string of metadata"""
 
     random_prefix: str
-    """Set to "true" to add a random suffix to filename"""
+    """true/false to append random suffix"""
 
     tags: str
-    """Comma-separated tags (e.g., tag1,tag2,tag3)"""
+    """Comma-separated tags"""
 
     transform: str
-    """Image transformation string (e.g., w_800,h_600,q_90)"""
+    """Transform string (w_300,h_300,c_crop,...)"""
+
+    webhook_url: str
+    """URL to notify on success"""

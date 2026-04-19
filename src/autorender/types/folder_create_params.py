@@ -8,8 +8,8 @@ __all__ = ["FolderCreateParams"]
 
 
 class FolderCreateParams(TypedDict, total=False):
-    name: Required[str]
-    """Folder display name"""
+    folder_name: Required[str]
+    """Folder name without slashes"""
 
-    parent_folder_no: str
-    """Parent folder number; omit or null for root"""
+    path: str
+    """Optional parent path, e.g. products/sku123"""

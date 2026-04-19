@@ -9,25 +9,23 @@ __all__ = ["UploadCreateFromURLParams"]
 
 class UploadCreateFromURLParams(TypedDict, total=False):
     remote_url: Required[str]
-    """The HTTP or HTTPS URL of the image to download"""
+    """HTTP/HTTPS URL to fetch"""
 
     custom_id: str
-    """Custom identifier for tracking the upload"""
+
+    file_name: str
+    """Override file name"""
 
     folder: str
-    """Folder path where the file should be stored"""
+    """Destination folder path"""
 
     metadata: str
-    """JSON string containing custom metadata object"""
+    """JSON string of metadata object"""
 
     random_prefix: str
-    """Set to 'true' to generate a random suffix for the filename"""
+    """true/false to append random suffix"""
 
     tags: str
-    """Comma-separated list of tags to apply to the file"""
-
-    transform: str
-    """Transformation string to apply during upload (e.g., w_800,h_600,c_crop)"""
+    """Comma-separated tags"""
 
     webhook_url: str
-    """URL to receive webhook notification when upload completes"""

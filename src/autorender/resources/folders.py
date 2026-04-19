@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import httpx
 
-from ..types import folder_list_params, folder_create_params, folder_rename_params
-from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ..types import folder_create_params, folder_rename_params
+from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
 from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -16,15 +16,15 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.folder import Folder
-from ..types.folder_list_response import FolderListResponse
 from ..types.folder_create_response import FolderCreateResponse
-from ..types.folder_delete_response import FolderDeleteResponse
+from ..types.folder_rename_response import FolderRenameResponse
 
 __all__ = ["FoldersResource", "AsyncFoldersResource"]
 
 
 class FoldersResource(SyncAPIResource):
+    """Folder management endpoints (API key required)"""
+
     @cached_property
     def with_raw_response(self) -> FoldersResourceWithRawResponse:
         """
@@ -47,8 +47,8 @@ class FoldersResource(SyncAPIResource):
     def create(
         self,
         *,
-        name: str,
-        parent_folder_no: str | Omit = omit,
+        folder_name: str,
+        path: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -57,12 +57,12 @@ class FoldersResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FolderCreateResponse:
         """
-        Create a folder under an optional parent.
+        Create folder
 
         Args:
-          name: Folder display name
+          folder_name: Folder name without slashes
 
-          parent_folder_no: Parent folder number; omit or null for root
+          path: Optional parent path, e.g. products/sku123
 
           extra_headers: Send extra headers
 
@@ -76,8 +76,8 @@ class FoldersResource(SyncAPIResource):
             "/api/v1/folders",
             body=maybe_transform(
                 {
-                    "name": name,
-                    "parent_folder_no": parent_folder_no,
+                    "folder_name": folder_name,
+                    "path": path,
                 },
                 folder_create_params.FolderCreateParams,
             ),
@@ -85,45 +85,6 @@ class FoldersResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=FolderCreateResponse,
-        )
-
-    def list(
-        self,
-        *,
-        parent_folder_no: str | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FolderListResponse:
-        """List folders under an optional parent.
-
-        Omit `parent_folder_no` to list
-        root-level folders.
-
-        Args:
-          parent_folder_no: Only return direct children of this folder (folder number)
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return self._get(
-            "/api/v1/folders",
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=maybe_transform({"parent_folder_no": parent_folder_no}, folder_list_params.FolderListParams),
-            ),
-            cast_to=FolderListResponse,
         )
 
     def delete(
@@ -136,10 +97,9 @@ class FoldersResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FolderDeleteResponse:
-        """Delete a folder by folder number.
-
-        No request body required.
+    ) -> None:
+        """
+        Delete folder
 
         Args:
           extra_headers: Send extra headers
@@ -152,12 +112,13 @@ class FoldersResource(SyncAPIResource):
         """
         if not folder_no:
             raise ValueError(f"Expected a non-empty value for `folder_no` but received {folder_no!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
             path_template("/api/v1/folders/{folder_no}", folder_no=folder_no),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FolderDeleteResponse,
+            cast_to=NoneType,
         )
 
     def rename(
@@ -171,11 +132,13 @@ class FoldersResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> Folder:
+    ) -> FolderRenameResponse:
         """
-        Rename a folder by `folder_no`.
+        Rename folder
 
         Args:
+          name: New folder name without slashes
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -192,11 +155,13 @@ class FoldersResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Folder,
+            cast_to=FolderRenameResponse,
         )
 
 
 class AsyncFoldersResource(AsyncAPIResource):
+    """Folder management endpoints (API key required)"""
+
     @cached_property
     def with_raw_response(self) -> AsyncFoldersResourceWithRawResponse:
         """
@@ -219,8 +184,8 @@ class AsyncFoldersResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        name: str,
-        parent_folder_no: str | Omit = omit,
+        folder_name: str,
+        path: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -229,12 +194,12 @@ class AsyncFoldersResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FolderCreateResponse:
         """
-        Create a folder under an optional parent.
+        Create folder
 
         Args:
-          name: Folder display name
+          folder_name: Folder name without slashes
 
-          parent_folder_no: Parent folder number; omit or null for root
+          path: Optional parent path, e.g. products/sku123
 
           extra_headers: Send extra headers
 
@@ -248,8 +213,8 @@ class AsyncFoldersResource(AsyncAPIResource):
             "/api/v1/folders",
             body=await async_maybe_transform(
                 {
-                    "name": name,
-                    "parent_folder_no": parent_folder_no,
+                    "folder_name": folder_name,
+                    "path": path,
                 },
                 folder_create_params.FolderCreateParams,
             ),
@@ -257,47 +222,6 @@ class AsyncFoldersResource(AsyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=FolderCreateResponse,
-        )
-
-    async def list(
-        self,
-        *,
-        parent_folder_no: str | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FolderListResponse:
-        """List folders under an optional parent.
-
-        Omit `parent_folder_no` to list
-        root-level folders.
-
-        Args:
-          parent_folder_no: Only return direct children of this folder (folder number)
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return await self._get(
-            "/api/v1/folders",
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=await async_maybe_transform(
-                    {"parent_folder_no": parent_folder_no}, folder_list_params.FolderListParams
-                ),
-            ),
-            cast_to=FolderListResponse,
         )
 
     async def delete(
@@ -310,10 +234,9 @@ class AsyncFoldersResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FolderDeleteResponse:
-        """Delete a folder by folder number.
-
-        No request body required.
+    ) -> None:
+        """
+        Delete folder
 
         Args:
           extra_headers: Send extra headers
@@ -326,12 +249,13 @@ class AsyncFoldersResource(AsyncAPIResource):
         """
         if not folder_no:
             raise ValueError(f"Expected a non-empty value for `folder_no` but received {folder_no!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
             path_template("/api/v1/folders/{folder_no}", folder_no=folder_no),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FolderDeleteResponse,
+            cast_to=NoneType,
         )
 
     async def rename(
@@ -345,11 +269,13 @@ class AsyncFoldersResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> Folder:
+    ) -> FolderRenameResponse:
         """
-        Rename a folder by `folder_no`.
+        Rename folder
 
         Args:
+          name: New folder name without slashes
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -366,7 +292,7 @@ class AsyncFoldersResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Folder,
+            cast_to=FolderRenameResponse,
         )
 
 
@@ -376,9 +302,6 @@ class FoldersResourceWithRawResponse:
 
         self.create = to_raw_response_wrapper(
             folders.create,
-        )
-        self.list = to_raw_response_wrapper(
-            folders.list,
         )
         self.delete = to_raw_response_wrapper(
             folders.delete,
@@ -395,9 +318,6 @@ class AsyncFoldersResourceWithRawResponse:
         self.create = async_to_raw_response_wrapper(
             folders.create,
         )
-        self.list = async_to_raw_response_wrapper(
-            folders.list,
-        )
         self.delete = async_to_raw_response_wrapper(
             folders.delete,
         )
@@ -413,9 +333,6 @@ class FoldersResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             folders.create,
         )
-        self.list = to_streamed_response_wrapper(
-            folders.list,
-        )
         self.delete = to_streamed_response_wrapper(
             folders.delete,
         )
@@ -430,9 +347,6 @@ class AsyncFoldersResourceWithStreamingResponse:
 
         self.create = async_to_streamed_response_wrapper(
             folders.create,
-        )
-        self.list = async_to_streamed_response_wrapper(
-            folders.list,
         )
         self.delete = async_to_streamed_response_wrapper(
             folders.delete,
