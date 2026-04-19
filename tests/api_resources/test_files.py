@@ -12,6 +12,7 @@ from tests.utils import assert_matches_type
 from autorender.types import (
     FileListResponse,
     FileRenameResponse,
+    FileUpdateResponse,
     FileRetrieveResponse,
 )
 
@@ -57,6 +58,54 @@ class TestFiles:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `file_no` but received ''"):
             client.files.with_raw_response.retrieve(
                 "",
+            )
+
+    @parametrize
+    def test_method_update(self, client: Autorender) -> None:
+        file = client.files.update(
+            file_no="fileNo",
+        )
+        assert_matches_type(FileUpdateResponse, file, path=["response"])
+
+    @parametrize
+    def test_method_update_with_all_params(self, client: Autorender) -> None:
+        file = client.files.update(
+            file_no="fileNo",
+            add_tags=["string"],
+            metadata={"foo": "bar"},
+            remove_tags=["string"],
+        )
+        assert_matches_type(FileUpdateResponse, file, path=["response"])
+
+    @parametrize
+    def test_raw_response_update(self, client: Autorender) -> None:
+        response = client.files.with_raw_response.update(
+            file_no="fileNo",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        file = response.parse()
+        assert_matches_type(FileUpdateResponse, file, path=["response"])
+
+    @parametrize
+    def test_streaming_response_update(self, client: Autorender) -> None:
+        with client.files.with_streaming_response.update(
+            file_no="fileNo",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            file = response.parse()
+            assert_matches_type(FileUpdateResponse, file, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_update(self, client: Autorender) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `file_no` but received ''"):
+            client.files.with_raw_response.update(
+                file_no="",
             )
 
     @parametrize
@@ -219,6 +268,54 @@ class TestAsyncFiles:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `file_no` but received ''"):
             await async_client.files.with_raw_response.retrieve(
                 "",
+            )
+
+    @parametrize
+    async def test_method_update(self, async_client: AsyncAutorender) -> None:
+        file = await async_client.files.update(
+            file_no="fileNo",
+        )
+        assert_matches_type(FileUpdateResponse, file, path=["response"])
+
+    @parametrize
+    async def test_method_update_with_all_params(self, async_client: AsyncAutorender) -> None:
+        file = await async_client.files.update(
+            file_no="fileNo",
+            add_tags=["string"],
+            metadata={"foo": "bar"},
+            remove_tags=["string"],
+        )
+        assert_matches_type(FileUpdateResponse, file, path=["response"])
+
+    @parametrize
+    async def test_raw_response_update(self, async_client: AsyncAutorender) -> None:
+        response = await async_client.files.with_raw_response.update(
+            file_no="fileNo",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        file = await response.parse()
+        assert_matches_type(FileUpdateResponse, file, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_update(self, async_client: AsyncAutorender) -> None:
+        async with async_client.files.with_streaming_response.update(
+            file_no="fileNo",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            file = await response.parse()
+            assert_matches_type(FileUpdateResponse, file, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_update(self, async_client: AsyncAutorender) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `file_no` but received ''"):
+            await async_client.files.with_raw_response.update(
+                file_no="",
             )
 
     @parametrize
