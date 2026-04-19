@@ -274,7 +274,7 @@ class UploadsResource(SyncAPIResource):
     def upload_with_token(
         self,
         token: str,
-        body: FileContent | BinaryTypes,
+        file: FileContent | BinaryTypes,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -289,7 +289,7 @@ class UploadsResource(SyncAPIResource):
         the raw file as binary in the request body.
 
         Args:
-          body: Raw file bytes. Accepts any file type (images, documents, videos, etc.).
+          file: Raw file bytes. Accepts any file type (images, documents, videos, etc.).
 
           extra_headers: Send extra headers
 
@@ -304,7 +304,7 @@ class UploadsResource(SyncAPIResource):
         extra_headers = {"Content-Type": "application/octet-stream", **(extra_headers or {})}
         return self._post(
             path_template("/api/v1/uploads/{token}", token=token),
-            content=read_file_content(body) if isinstance(body, os.PathLike) else body,
+            content=read_file_content(file) if isinstance(file, os.PathLike) else file,
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -541,7 +541,7 @@ class AsyncUploadsResource(AsyncAPIResource):
     async def upload_with_token(
         self,
         token: str,
-        body: FileContent | AsyncBinaryTypes,
+        file: FileContent | AsyncBinaryTypes,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -556,7 +556,7 @@ class AsyncUploadsResource(AsyncAPIResource):
         the raw file as binary in the request body.
 
         Args:
-          body: Raw file bytes. Accepts any file type (images, documents, videos, etc.).
+          file: Raw file bytes. Accepts any file type (images, documents, videos, etc.).
 
           extra_headers: Send extra headers
 
@@ -571,7 +571,7 @@ class AsyncUploadsResource(AsyncAPIResource):
         extra_headers = {"Content-Type": "application/octet-stream", **(extra_headers or {})}
         return await self._post(
             path_template("/api/v1/uploads/{token}", token=token),
-            content=await async_read_file_content(body) if isinstance(body, os.PathLike) else body,
+            content=await async_read_file_content(file) if isinstance(file, os.PathLike) else file,
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
