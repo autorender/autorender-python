@@ -562,7 +562,12 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
             elif not files:
                 # Don't set content when JSON is sent as multipart/form-data,
                 # since httpx's content param overrides other body arguments
-                kwargs["content"] = openapi_dumps(json_data) if is_given(json_data) and json_data is not None else None
+                body = openapi_dumps(json_data) if is_given(json_data) and json_data is not None else None
+                kwargs["content"] = body
+                if body is None:
+                    # Remove Content-Type for body-less requests (e.g. DELETE with no body)
+                    # to avoid servers rejecting an empty application/json body
+                    headers.pop("Content-Type", None)
             kwargs["files"] = files
         else:
             headers.pop("Content-Type", None)
