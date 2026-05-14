@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
-from typing import Dict
 from typing_extensions import Literal
 
 import httpx
 
-from ..types import file_list_params, file_rename_params, file_update_params
-from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
+from ..types import file_list_params, file_rename_params
+from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
 from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -21,7 +20,6 @@ from .._response import (
 from .._base_client import make_request_options
 from ..types.file_list_response import FileListResponse
 from ..types.file_rename_response import FileRenameResponse
-from ..types.file_update_response import FileUpdateResponse
 from ..types.file_retrieve_response import FileRetrieveResponse
 
 __all__ = ["FilesResource", "AsyncFilesResource"]
@@ -82,66 +80,15 @@ class FilesResource(SyncAPIResource):
             cast_to=FileRetrieveResponse,
         )
 
-    def update(
-        self,
-        file_no: str,
-        *,
-        add_tags: SequenceNotStr[str] | Omit = omit,
-        metadata: Dict[str, object] | Omit = omit,
-        remove_tags: SequenceNotStr[str] | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FileUpdateResponse:
-        """
-        Update file tags/metadata
-
-        Args:
-          add_tags: Tags to add to the existing set
-
-          metadata: Metadata to merge into existing metadata
-
-          remove_tags: Tags to remove from the existing set
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not file_no:
-            raise ValueError(f"Expected a non-empty value for `file_no` but received {file_no!r}")
-        return self._patch(
-            path_template("/api/v1/files/{file_no}", file_no=file_no),
-            body=maybe_transform(
-                {
-                    "add_tags": add_tags,
-                    "metadata": metadata,
-                    "remove_tags": remove_tags,
-                },
-                file_update_params.FileUpdateParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=FileUpdateResponse,
-        )
-
     def list(
         self,
         *,
         folder_no: str | Omit = omit,
         limit: int | Omit = omit,
-        name: str | Omit = omit,
         page: int | Omit = omit,
-        path: str | Omit = omit,
-        sort: Literal["created_at_asc", "created_at_desc", "size_asc", "size_desc"] | Omit = omit,
-        tags: str | Omit = omit,
+        search: str | Omit = omit,
+        sort: Literal["name_asc", "name_desc", "size_asc", "size_desc", "created_at_asc", "created_at_desc"]
+        | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -153,13 +100,9 @@ class FilesResource(SyncAPIResource):
         List/search files with pagination, filtering, and sorting.
 
         Args:
-          folder_no: Exact folder number
+          folder_no: Filter by folder number
 
-          name: Partial name match (case-insensitive)
-
-          path: Folder prefix (e.g. products/sku123/)
-
-          tags: Comma-separated tags
+          search: Partial name match (case-insensitive)
 
           extra_headers: Send extra headers
 
@@ -180,11 +123,9 @@ class FilesResource(SyncAPIResource):
                     {
                         "folder_no": folder_no,
                         "limit": limit,
-                        "name": name,
                         "page": page,
-                        "path": path,
+                        "search": search,
                         "sort": sort,
-                        "tags": tags,
                     },
                     file_list_params.FileListParams,
                 ),
@@ -319,66 +260,15 @@ class AsyncFilesResource(AsyncAPIResource):
             cast_to=FileRetrieveResponse,
         )
 
-    async def update(
-        self,
-        file_no: str,
-        *,
-        add_tags: SequenceNotStr[str] | Omit = omit,
-        metadata: Dict[str, object] | Omit = omit,
-        remove_tags: SequenceNotStr[str] | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FileUpdateResponse:
-        """
-        Update file tags/metadata
-
-        Args:
-          add_tags: Tags to add to the existing set
-
-          metadata: Metadata to merge into existing metadata
-
-          remove_tags: Tags to remove from the existing set
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not file_no:
-            raise ValueError(f"Expected a non-empty value for `file_no` but received {file_no!r}")
-        return await self._patch(
-            path_template("/api/v1/files/{file_no}", file_no=file_no),
-            body=await async_maybe_transform(
-                {
-                    "add_tags": add_tags,
-                    "metadata": metadata,
-                    "remove_tags": remove_tags,
-                },
-                file_update_params.FileUpdateParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=FileUpdateResponse,
-        )
-
     async def list(
         self,
         *,
         folder_no: str | Omit = omit,
         limit: int | Omit = omit,
-        name: str | Omit = omit,
         page: int | Omit = omit,
-        path: str | Omit = omit,
-        sort: Literal["created_at_asc", "created_at_desc", "size_asc", "size_desc"] | Omit = omit,
-        tags: str | Omit = omit,
+        search: str | Omit = omit,
+        sort: Literal["name_asc", "name_desc", "size_asc", "size_desc", "created_at_asc", "created_at_desc"]
+        | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -390,13 +280,9 @@ class AsyncFilesResource(AsyncAPIResource):
         List/search files with pagination, filtering, and sorting.
 
         Args:
-          folder_no: Exact folder number
+          folder_no: Filter by folder number
 
-          name: Partial name match (case-insensitive)
-
-          path: Folder prefix (e.g. products/sku123/)
-
-          tags: Comma-separated tags
+          search: Partial name match (case-insensitive)
 
           extra_headers: Send extra headers
 
@@ -417,11 +303,9 @@ class AsyncFilesResource(AsyncAPIResource):
                     {
                         "folder_no": folder_no,
                         "limit": limit,
-                        "name": name,
                         "page": page,
-                        "path": path,
+                        "search": search,
                         "sort": sort,
-                        "tags": tags,
                     },
                     file_list_params.FileListParams,
                 ),
@@ -508,9 +392,6 @@ class FilesResourceWithRawResponse:
         self.retrieve = to_raw_response_wrapper(
             files.retrieve,
         )
-        self.update = to_raw_response_wrapper(
-            files.update,
-        )
         self.list = to_raw_response_wrapper(
             files.list,
         )
@@ -528,9 +409,6 @@ class AsyncFilesResourceWithRawResponse:
 
         self.retrieve = async_to_raw_response_wrapper(
             files.retrieve,
-        )
-        self.update = async_to_raw_response_wrapper(
-            files.update,
         )
         self.list = async_to_raw_response_wrapper(
             files.list,
@@ -550,9 +428,6 @@ class FilesResourceWithStreamingResponse:
         self.retrieve = to_streamed_response_wrapper(
             files.retrieve,
         )
-        self.update = to_streamed_response_wrapper(
-            files.update,
-        )
         self.list = to_streamed_response_wrapper(
             files.list,
         )
@@ -570,9 +445,6 @@ class AsyncFilesResourceWithStreamingResponse:
 
         self.retrieve = async_to_streamed_response_wrapper(
             files.retrieve,
-        )
-        self.update = async_to_streamed_response_wrapper(
-            files.update,
         )
         self.list = async_to_streamed_response_wrapper(
             files.list,

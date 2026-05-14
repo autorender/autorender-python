@@ -36,10 +36,11 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import files, folders, uploads
+    from .resources import files, folders, uploads, multipart_uploads
     from .resources.files import FilesResource, AsyncFilesResource
     from .resources.folders import FoldersResource, AsyncFoldersResource
     from .resources.uploads import UploadsResource, AsyncUploadsResource
+    from .resources.multipart_uploads import MultipartUploadsResource, AsyncMultipartUploadsResource
 
 __all__ = [
     "Timeout",
@@ -133,6 +134,13 @@ class Autorender(SyncAPIClient):
         from .resources.folders import FoldersResource
 
         return FoldersResource(self)
+
+    @cached_property
+    def multipart_uploads(self) -> MultipartUploadsResource:
+        """Upload endpoints (API key required)"""
+        from .resources.multipart_uploads import MultipartUploadsResource
+
+        return MultipartUploadsResource(self)
 
     @cached_property
     def with_raw_response(self) -> AutorenderWithRawResponse:
@@ -340,6 +348,13 @@ class AsyncAutorender(AsyncAPIClient):
         return AsyncFoldersResource(self)
 
     @cached_property
+    def multipart_uploads(self) -> AsyncMultipartUploadsResource:
+        """Upload endpoints (API key required)"""
+        from .resources.multipart_uploads import AsyncMultipartUploadsResource
+
+        return AsyncMultipartUploadsResource(self)
+
+    @cached_property
     def with_raw_response(self) -> AsyncAutorenderWithRawResponse:
         return AsyncAutorenderWithRawResponse(self)
 
@@ -490,6 +505,13 @@ class AutorenderWithRawResponse:
 
         return FoldersResourceWithRawResponse(self._client.folders)
 
+    @cached_property
+    def multipart_uploads(self) -> multipart_uploads.MultipartUploadsResourceWithRawResponse:
+        """Upload endpoints (API key required)"""
+        from .resources.multipart_uploads import MultipartUploadsResourceWithRawResponse
+
+        return MultipartUploadsResourceWithRawResponse(self._client.multipart_uploads)
+
 
 class AsyncAutorenderWithRawResponse:
     _client: AsyncAutorender
@@ -517,6 +539,13 @@ class AsyncAutorenderWithRawResponse:
         from .resources.folders import AsyncFoldersResourceWithRawResponse
 
         return AsyncFoldersResourceWithRawResponse(self._client.folders)
+
+    @cached_property
+    def multipart_uploads(self) -> multipart_uploads.AsyncMultipartUploadsResourceWithRawResponse:
+        """Upload endpoints (API key required)"""
+        from .resources.multipart_uploads import AsyncMultipartUploadsResourceWithRawResponse
+
+        return AsyncMultipartUploadsResourceWithRawResponse(self._client.multipart_uploads)
 
 
 class AutorenderWithStreamedResponse:
@@ -546,6 +575,13 @@ class AutorenderWithStreamedResponse:
 
         return FoldersResourceWithStreamingResponse(self._client.folders)
 
+    @cached_property
+    def multipart_uploads(self) -> multipart_uploads.MultipartUploadsResourceWithStreamingResponse:
+        """Upload endpoints (API key required)"""
+        from .resources.multipart_uploads import MultipartUploadsResourceWithStreamingResponse
+
+        return MultipartUploadsResourceWithStreamingResponse(self._client.multipart_uploads)
+
 
 class AsyncAutorenderWithStreamedResponse:
     _client: AsyncAutorender
@@ -573,6 +609,13 @@ class AsyncAutorenderWithStreamedResponse:
         from .resources.folders import AsyncFoldersResourceWithStreamingResponse
 
         return AsyncFoldersResourceWithStreamingResponse(self._client.folders)
+
+    @cached_property
+    def multipart_uploads(self) -> multipart_uploads.AsyncMultipartUploadsResourceWithStreamingResponse:
+        """Upload endpoints (API key required)"""
+        from .resources.multipart_uploads import AsyncMultipartUploadsResourceWithStreamingResponse
+
+        return AsyncMultipartUploadsResourceWithStreamingResponse(self._client.multipart_uploads)
 
 
 Client = Autorender

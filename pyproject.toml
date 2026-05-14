@@ -5,7 +5,7 @@ description = "The official Python library for the autorender API"
 dynamic = ["readme"]
 license = "MIT"
 authors = [
-{ name = "Autorender", email = "support@autorender.io" },
+{ name = "Autorender", email = "engineering@autorender.io" },
 ]
 
 dependencies = [
