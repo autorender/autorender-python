@@ -17,6 +17,8 @@ class UploadCreateResponse(BaseModel):
 
     custom_id: Optional[str] = None
 
+    extension: str
+
     file_no: str
 
     folder_no: Optional[str] = None
@@ -24,8 +26,6 @@ class UploadCreateResponse(BaseModel):
     height: Optional[int] = None
 
     is_duplicate: bool
-
-    is_private: bool
 
     metadata: Optional[Dict[str, object]] = None
 
@@ -39,6 +39,8 @@ class UploadCreateResponse(BaseModel):
 
     tags: List[str]
 
+    thumbnail: str
+
     upload_source: str
 
     url: str
@@ -50,3 +52,5 @@ class UploadCreateResponse(BaseModel):
     format: Optional[str] = None
 
     hash: Optional[str] = None
+
+    is_private: Optional[bool] = None

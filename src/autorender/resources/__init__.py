@@ -24,6 +24,14 @@ from .uploads import (
     UploadsResourceWithStreamingResponse,
     AsyncUploadsResourceWithStreamingResponse,
 )
+from .multipart_uploads import (
+    MultipartUploadsResource,
+    AsyncMultipartUploadsResource,
+    MultipartUploadsResourceWithRawResponse,
+    AsyncMultipartUploadsResourceWithRawResponse,
+    MultipartUploadsResourceWithStreamingResponse,
+    AsyncMultipartUploadsResourceWithStreamingResponse,
+)
 
 __all__ = [
     "UploadsResource",
@@ -44,4 +52,10 @@ __all__ = [
     "AsyncFoldersResourceWithRawResponse",
     "FoldersResourceWithStreamingResponse",
     "AsyncFoldersResourceWithStreamingResponse",
+    "MultipartUploadsResource",
+    "AsyncMultipartUploadsResource",
+    "MultipartUploadsResourceWithRawResponse",
+    "AsyncMultipartUploadsResourceWithRawResponse",
+    "MultipartUploadsResourceWithStreamingResponse",
+    "AsyncMultipartUploadsResourceWithStreamingResponse",
 ]

@@ -2,27 +2,30 @@
 
 from typing import Dict, List, Optional
 from datetime import datetime
-from typing_extensions import Literal
 
 from .._models import BaseModel
 
-__all__ = ["FileUpdateResponse", "Data"]
+__all__ = ["MultipartUploadCompleteResponse"]
 
 
-class Data(BaseModel):
+class MultipartUploadCompleteResponse(BaseModel):
+    """Upload completed"""
+
     id: str
 
     created_at: datetime
 
-    file_no: str
+    custom_id: Optional[str] = None
 
-    folder_name: Optional[str] = None
+    extension: str
+
+    file_no: str
 
     folder_no: Optional[str] = None
 
-    format: Optional[str] = None
-
     height: Optional[int] = None
+
+    is_duplicate: bool
 
     metadata: Optional[Dict[str, object]] = None
 
@@ -34,20 +37,20 @@ class Data(BaseModel):
 
     size: int
 
-    source: str
-
     tags: List[str]
 
-    updated_at: Optional[datetime] = None
+    thumbnail: str
+
+    upload_source: str
 
     url: str
 
     width: Optional[int] = None
 
+    workspace_id: str
 
-class FileUpdateResponse(BaseModel):
-    """Updated file"""
+    format: Optional[str] = None
 
-    data: Data
+    hash: Optional[str] = None
 
-    success: Literal[True]
+    is_private: Optional[bool] = None

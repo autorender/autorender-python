@@ -11,7 +11,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ## Documentation
 
-The REST API documentation can be found on [docs.autorender.io](https://docs.autorender.io). The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [autorender.mintlify.app](https://autorender.mintlify.app/). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
@@ -32,11 +32,10 @@ client = Autorender(
     api_key=os.environ.get("AUTORENDER_API_KEY"),  # This is the default and can be omitted
 )
 
-upload = client.uploads.create(
-    file=b"<binary>",
-    file_name="photo.jpg",
+files = client.files.list(
+    limit=10,
 )
-print(upload.id)
+print(files.files)
 ```
 
 While you can provide an `api_key` keyword argument,
@@ -59,11 +58,10 @@ client = AsyncAutorender(
 
 
 async def main() -> None:
-    upload = await client.uploads.create(
-        file=b"<binary>",
-        file_name="photo.jpg",
+    files = await client.files.list(
+        limit=10,
     )
-    print(upload.id)
+    print(files.files)
 
 
 asyncio.run(main())
@@ -96,11 +94,10 @@ async def main() -> None:
         api_key=os.environ.get("AUTORENDER_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
-        upload = await client.uploads.create(
-            file=b"<binary>",
-            file_name="photo.jpg",
+        files = await client.files.list(
+            limit=10,
         )
-        print(upload.id)
+        print(files.files)
 
 
 asyncio.run(main())
@@ -114,22 +111,6 @@ Nested request parameters are [TypedDicts](https://docs.python.org/3/library/typ
 - Converting to a dictionary, `model.to_dict()`
 
 Typed requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.
-
-## Nested params
-
-Nested parameters are dictionaries, typed using `TypedDict`, for example:
-
-```python
-from autorender import Autorender
-
-client = Autorender()
-
-response = client.uploads.generate_token(
-    file_name="file_name",
-    allow_override={},
-)
-print(response.allow_override)
-```
 
 ## File uploads
 

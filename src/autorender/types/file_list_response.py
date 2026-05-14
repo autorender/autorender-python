@@ -3,12 +3,14 @@
 from typing import Dict, List, Optional
 from datetime import datetime
 
+from pydantic import Field as FieldInfo
+
 from .._models import BaseModel
 
-__all__ = ["FileListResponse", "Item"]
+__all__ = ["FileListResponse", "File", "Meta"]
 
 
-class Item(BaseModel):
+class File(BaseModel):
     id: str
 
     created_at: datetime
@@ -44,17 +46,21 @@ class Item(BaseModel):
     width: Optional[int] = None
 
 
-class FileListResponse(BaseModel):
-    """Files list"""
+class Meta(BaseModel):
+    has_next: bool = FieldInfo(alias="hasNext")
 
-    is_page_next: bool
-
-    items: List[Item]
+    has_prev: bool = FieldInfo(alias="hasPrev")
 
     limit: int
 
     page: int
 
-    total_count: int
+    total: int
 
-    total_pages: int
+
+class FileListResponse(BaseModel):
+    """Files list"""
+
+    files: List[File]
+
+    meta: Meta
