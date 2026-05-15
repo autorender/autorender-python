@@ -1,5 +1,5 @@
 [project]
-name = "autorender"
+name = "autorender-python"
 version = "0.1.0"
 description = "The official Python library for the autorender API"
 dynamic = ["readme"]
