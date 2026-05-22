@@ -3,8 +3,6 @@
 from typing import List, Generic, TypeVar, Optional
 from typing_extensions import override
 
-from pydantic import Field
-
 from ._base_client import BasePage, PageInfo, BaseSyncPage, BaseAsyncPage
 
 __all__ = ["SyncPagePagination", "AsyncPagePagination"]
@@ -15,7 +13,7 @@ _T = TypeVar("_T")
 class SyncPagePagination(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
     data: List[_T]
     current_page: Optional[int] = None
-    has_next: Optional[bool] = Field(None, alias="has_next_page")
+    has_next: Optional[bool] = None
     total_results: Optional[int] = None
 
     @override
@@ -46,7 +44,7 @@ class SyncPagePagination(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
 class AsyncPagePagination(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
     data: List[_T]
     current_page: Optional[int] = None
-    has_next: Optional[bool] = Field(None, alias="has_next_page")
+    has_next: Optional[bool] = None
     total_results: Optional[int] = None
 
     @override
