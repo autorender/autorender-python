@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.0 (2026-05-24)
+
+Full Changelog: [v0.1.0...v0.2.0](https://github.com/autorenderhq/autorender-python/compare/v0.1.0...v0.2.0)
+
+### Features
+
+* **api:** api update ([0f76e24](https://github.com/autorenderhq/autorender-python/commit/0f76e24efc67831222b521c656ae07bbc15b6628))
+
+
+### Chores
+
+* configure new SDK language ([37cfdf7](https://github.com/autorenderhq/autorender-python/commit/37cfdf7e7bfa13befbd5d680135ab67e00ac9e56))
+
 ## 0.1.0 (2026-05-15)
 
 Full Changelog: [v0.0.1...v0.1.0](https://github.com/autorenderhq/autorender-python/compare/v0.0.1...v0.1.0)
