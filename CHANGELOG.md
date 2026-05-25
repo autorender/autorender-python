@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/autorenderhq/autorender-python/compare/v0.2.0...v0.2.1) (2026-05-25)
+
+
+### Bug Fixes
+
+* publish to correct PyPI package name (autorender) ([5bb8f32](https://github.com/autorenderhq/autorender-python/commit/5bb8f32faae2a3f48b5696b8517b4a6dfd686163))
+
 ## [0.2.0](https://github.com/autorenderhq/autorender-python/compare/v0.1.0...v0.2.0) (2026-05-25)
 
 
