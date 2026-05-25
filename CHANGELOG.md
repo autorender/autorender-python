@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.2.0](https://github.com/autorenderhq/autorender-python/compare/v0.1.0...v0.2.0) (2026-05-25)
+
+
+### Features
+
+* add test CI job ([2c25e3a](https://github.com/autorenderhq/autorender-python/commit/2c25e3ad8ffe7ff44d5e7781e37de7c2598550df))
+* initial stlc build ([0bdb709](https://github.com/autorenderhq/autorender-python/commit/0bdb709b1d8e670a795f867f71fab9c3ef6be539))
+
+
+### Bug Fixes
+
+* install rye for Python SDK bootstrap ([5f089bf](https://github.com/autorenderhq/autorender-python/commit/5f089bf37c183b4d41b1eb1787c5b7390d93b0f2))
+* **python:** rename pagination field has_next_page -&gt; has_next to fix pyright lint ([729d204](https://github.com/autorenderhq/autorender-python/commit/729d20471bdfe545acdea2e443cfb2b8436ba08a))
+
+
+### Chores
+
+* trigger release-please ([8db5acc](https://github.com/autorenderhq/autorender-python/commit/8db5acc865fce568f3ebb33c2e2536d9e84a41a6))
+* update stlc custom-code tracking files ([505f95e](https://github.com/autorenderhq/autorender-python/commit/505f95e9e6b66928d05ffa5b630102fdfe3b5e3e))
+
 ## [0.1.0](https://github.com/autorenderhq/autorender-python/compare/v0.0.1...v0.1.0) (2026-05-25)
 
 
