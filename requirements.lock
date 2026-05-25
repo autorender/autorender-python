@@ -13,14 +13,14 @@
 aiohappyeyeballs==2.6.1
     # via aiohttp
 aiohttp==3.13.3
-    # via autorender
+    # via autorender-python
     # via httpx-aiohttp
 aiosignal==1.4.0
     # via aiohttp
 annotated-types==0.7.0
     # via pydantic
 anyio==4.12.1
-    # via autorender
+    # via autorender-python
     # via httpx
 async-timeout==5.0.1
     # via aiohttp
@@ -30,7 +30,7 @@ certifi==2026.1.4
     # via httpcore
     # via httpx
 distro==1.9.0
-    # via autorender
+    # via autorender-python
 exceptiongroup==1.3.1
     # via anyio
 frozenlist==1.8.0
@@ -41,10 +41,10 @@ h11==0.16.0
 httpcore==1.0.9
     # via httpx
 httpx==0.28.1
-    # via autorender
+    # via autorender-python
     # via httpx-aiohttp
 httpx-aiohttp==0.1.12
-    # via autorender
+    # via autorender-python
 idna==3.11
     # via anyio
     # via httpx
@@ -56,15 +56,15 @@ propcache==0.4.1
     # via aiohttp
     # via yarl
 pydantic==2.12.5
-    # via autorender
+    # via autorender-python
 pydantic-core==2.41.5
     # via pydantic
 sniffio==1.3.1
-    # via autorender
+    # via autorender-python
 typing-extensions==4.15.0
     # via aiosignal
     # via anyio
-    # via autorender
+    # via autorender-python
     # via exceptiongroup
     # via multidict
     # via pydantic
