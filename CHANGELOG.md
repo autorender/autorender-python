@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.2.2](https://github.com/autorenderhq/autorender-python/compare/v0.2.1...v0.2.2) (2026-06-12)
+
+
+### Bug Fixes
+
+* preserve production-managed files in release branch ([df62271](https://github.com/autorenderhq/autorender-python/commit/df62271022fe248a89d687cf75b72ad7ad04f533))
+* strip internal workflows from production release branch ([eff96da](https://github.com/autorenderhq/autorender-python/commit/eff96da6776b37be28cba791ab8c79b37cea04b0))
+* update promote workflow and add back-sync from production ([480e3d3](https://github.com/autorenderhq/autorender-python/commit/480e3d33cb70eb0064ff352e15197d3f628936a8))
+* use blob comparison in overlay; add language-specific version files ([8201cbf](https://github.com/autorenderhq/autorender-python/commit/8201cbff752bb9df08d4f606fb593a7cebebb06a))
+* use persist-credentials: false in sync workflow ([6f8e8a0](https://github.com/autorenderhq/autorender-python/commit/6f8e8a0ffc5f06760479249a630338387c8c61e2))
+
+
+### Chores
+
+* preserve production-managed files ([a4eebf3](https://github.com/autorenderhq/autorender-python/commit/a4eebf3483db6c5fefb8ccfe6e187812894902ce))
+* remove staging-only workflows from production ([6fd7d39](https://github.com/autorenderhq/autorender-python/commit/6fd7d39d32178cfeac47a6534a82be7c1809e131))
+* remove staging-only workflows from production ([53464a4](https://github.com/autorenderhq/autorender-python/commit/53464a4f6f535ebce37aae6089d230c7bd782235))
+* strip internal workflows; preserve production-managed files ([51d2e56](https://github.com/autorenderhq/autorender-python/commit/51d2e5686fe80673ce44c6be53d90c6bbb43f02a))
+
+
+### Documentation
+
+* add auto-generated notice to CONTRIBUTING.md ([88b420c](https://github.com/autorenderhq/autorender-python/commit/88b420c07c39698625b03dce06a45bdcf8076816))
+
 ## [0.2.1](https://github.com/autorenderhq/autorender-python/compare/v0.2.0...v0.2.1) (2026-05-25)
 
 
