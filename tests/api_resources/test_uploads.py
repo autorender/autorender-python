@@ -85,7 +85,7 @@ class TestUploads:
             folder="folder",
             metadata="metadata",
             random_prefix="random_prefix",
-            tags="tags",
+            tags=["string"],
             webhook_url="https://example.com",
         )
         assert_matches_type(UploadCreateFromURLResponse, upload, path=["response"])
@@ -185,7 +185,7 @@ class TestAsyncUploads:
             folder="folder",
             metadata="metadata",
             random_prefix="random_prefix",
-            tags="tags",
+            tags=["string"],
             webhook_url="https://example.com",
         )
         assert_matches_type(UploadCreateFromURLResponse, upload, path=["response"])

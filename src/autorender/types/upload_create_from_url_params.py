@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+from typing import Union
 from typing_extensions import Required, TypedDict
+
+from .._types import SequenceNotStr
 
 __all__ = ["UploadCreateFromURLParams"]
 
@@ -25,7 +28,7 @@ class UploadCreateFromURLParams(TypedDict, total=False):
     random_prefix: str
     """true/false to append random suffix"""
 
-    tags: str
-    """Comma-separated tags"""
+    tags: Union[SequenceNotStr[str], str]
+    """Tags array or comma-separated string"""
 
     webhook_url: str
