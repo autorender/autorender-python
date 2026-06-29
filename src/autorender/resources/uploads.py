@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Mapping, cast
+from typing import Union, Mapping, cast
 
 import httpx
 
 from ..types import upload_create_params, upload_create_from_url_params
 from .._files import deepcopy_with_paths
-from .._types import Body, Omit, Query, Headers, NotGiven, FileTypes, omit, not_given
+from .._types import Body, Omit, Query, Headers, NotGiven, FileTypes, SequenceNotStr, omit, not_given
 from .._utils import extract_files, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -134,7 +134,7 @@ class UploadsResource(SyncAPIResource):
         folder: str | Omit = omit,
         metadata: str | Omit = omit,
         random_prefix: str | Omit = omit,
-        tags: str | Omit = omit,
+        tags: Union[SequenceNotStr[str], str] | Omit = omit,
         webhook_url: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -157,7 +157,7 @@ class UploadsResource(SyncAPIResource):
 
           random_prefix: true/false to append random suffix
 
-          tags: Comma-separated tags
+          tags: Tags array or comma-separated string
 
           extra_headers: Send extra headers
 
@@ -298,7 +298,7 @@ class AsyncUploadsResource(AsyncAPIResource):
         folder: str | Omit = omit,
         metadata: str | Omit = omit,
         random_prefix: str | Omit = omit,
-        tags: str | Omit = omit,
+        tags: Union[SequenceNotStr[str], str] | Omit = omit,
         webhook_url: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -321,7 +321,7 @@ class AsyncUploadsResource(AsyncAPIResource):
 
           random_prefix: true/false to append random suffix
 
-          tags: Comma-separated tags
+          tags: Tags array or comma-separated string
 
           extra_headers: Send extra headers
 
