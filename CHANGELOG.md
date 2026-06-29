@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.3](https://github.com/autorenderhq/autorender-python/compare/v0.2.2...v0.2.3) (2026-06-29)
+
+
+### Chores
+
+* remove Stainless attribution from README and SECURITY ([d0947e2](https://github.com/autorenderhq/autorender-python/commit/d0947e288000a296dab8f61ee30a47c35bf8cf91))
+* strip internal workflows; preserve production-managed files ([ac1c0d9](https://github.com/autorenderhq/autorender-python/commit/ac1c0d97235de3b8613f9f661a7ae61defa916d0))
+
 ## [0.2.2](https://github.com/autorenderhq/autorender-python/compare/v0.2.1...v0.2.2) (2026-06-12)
 
 
