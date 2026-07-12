@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4](https://github.com/autorender/autorender-python/compare/v0.2.3...v0.2.4) (2026-07-12)
+
+
+### Chores
+
+* rename autorenderhq -&gt; autorender references (GitHub org rename) ([#16](https://github.com/autorender/autorender-python/issues/16)) ([6d6648b](https://github.com/autorender/autorender-python/commit/6d6648bb02999718d81afaea6f8abd220cae49fe))
+
 ## [0.2.3](https://github.com/autorender/autorender-python/compare/v0.2.2...v0.2.3) (2026-06-29)
 
 
