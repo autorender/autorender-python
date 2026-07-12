@@ -11,9 +11,9 @@ permissions:
 jobs:
   promote:
     runs-on: ubuntu-latest
-    if: github.repository == 'autorenderhq/autorender-python-staging'
+    if: github.repository == 'autorender/autorender-python-staging'
     env:
-      PRODUCTION_REPO: autorenderhq/autorender-python
+      PRODUCTION_REPO: autorender/autorender-python
       GH_TOKEN: ${{ secrets.PRODUCTION_REPO_TOKEN }}
     steps:
       - name: Check out staging

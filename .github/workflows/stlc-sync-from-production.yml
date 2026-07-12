@@ -12,9 +12,9 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    if: github.repository == 'autorenderhq/autorender-python-staging'
+    if: github.repository == 'autorender/autorender-python-staging'
     env:
-      PRODUCTION_REPO: autorenderhq/autorender-python
+      PRODUCTION_REPO: autorender/autorender-python
     steps:
       - name: Check out staging
         uses: actions/checkout@v4
