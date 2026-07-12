@@ -3,7 +3,7 @@
 > **Note:** This SDK is automatically generated from the Autorender API specification.
 > Code pull requests are not accepted — changes to generated code will be overwritten on the next generation cycle.
 >
-> **Bug reports and feature requests are welcome** — please [open an issue](https://github.com/autorenderhq/autorender-python/issues).
+> **Bug reports and feature requests are welcome** — please [open an issue](https://github.com/autorender/autorender-python/issues).
 
 ---
 
@@ -71,7 +71,7 @@ If you’d like to use the repository from source, you can either install from g
 To install via git:
 
 ```sh
-$ pip install git+ssh://git@github.com/autorenderhq/autorender-python.git
+$ pip install git+ssh://git@github.com/autorender/autorender-python.git
 ```
 
 Alternatively, you can build from source and install the wheel file:
@@ -128,7 +128,7 @@ the changes aren't made through the automated pipeline, you may want to make rel
 
 ### Publish with a GitHub workflow
 
-You can release to package managers by using [the `Publish PyPI` GitHub action](https://www.github.com/autorenderhq/autorender-python/actions/workflows/publish-pypi.yml). This requires a setup organization or repository secret to be set up.
+You can release to package managers by using [the `Publish PyPI` GitHub action](https://www.github.com/autorender/autorender-python/actions/workflows/publish-pypi.yml). This requires a setup organization or repository secret to be set up.
 
 ### Publish manually
 
