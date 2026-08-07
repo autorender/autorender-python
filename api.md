@@ -22,7 +22,7 @@ from autorender.types import FileRetrieveResponse, FileListResponse, FileRenameR
 Methods:
 
 - <code title="get /api/v1/files/{fileNo}">client.files.<a href="./src/autorender/resources/files.py">retrieve</a>(file_no) -> <a href="./src/autorender/types/file_retrieve_response.py">FileRetrieveResponse</a></code>
-- <code title="get /api/v1/files">client.files.<a href="./src/autorender/resources/files.py">list</a>(\*\*<a href="src/autorender/types/file_list_params.py">params</a>) -> <a href="./src/autorender/types/file_list_response.py">FileListResponse</a></code>
+- <code title="get /api/v1/files">client.files.<a href="./src/autorender/resources/files.py">list</a>(\*\*<a href="src/autorender/types/file_list_params.py">params</a>) -> <a href="./src/autorender/types/file_list_response.py">SyncPagePagination[FileListResponse]</a></code>
 - <code title="delete /api/v1/files/{fileNo}">client.files.<a href="./src/autorender/resources/files.py">delete</a>(file_no) -> None</code>
 - <code title="patch /api/v1/files/{fileNo}/rename">client.files.<a href="./src/autorender/resources/files.py">rename</a>(file_no, \*\*<a href="src/autorender/types/file_rename_params.py">params</a>) -> <a href="./src/autorender/types/file_rename_response.py">FileRenameResponse</a></code>
 

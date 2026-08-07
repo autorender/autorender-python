@@ -17,7 +17,8 @@ from .._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .._base_client import make_request_options
+from ..pagination import SyncPagePagination, AsyncPagePagination
+from .._base_client import AsyncPaginator, make_request_options
 from ..types.file_list_response import FileListResponse
 from ..types.file_rename_response import FileRenameResponse
 from ..types.file_retrieve_response import FileRetrieveResponse
@@ -95,7 +96,7 @@ class FilesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FileListResponse:
+    ) -> SyncPagePagination[FileListResponse]:
         """
         List/search files with pagination, filtering, and sorting.
 
@@ -112,8 +113,9 @@ class FilesResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get(
+        return self._get_api_list(
             "/api/v1/files",
+            page=SyncPagePagination[FileListResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -130,7 +132,7 @@ class FilesResource(SyncAPIResource):
                     file_list_params.FileListParams,
                 ),
             ),
-            cast_to=FileListResponse,
+            model=FileListResponse,
         )
 
     def delete(
@@ -260,7 +262,7 @@ class AsyncFilesResource(AsyncAPIResource):
             cast_to=FileRetrieveResponse,
         )
 
-    async def list(
+    def list(
         self,
         *,
         folder_no: str | Omit = omit,
@@ -275,7 +277,7 @@ class AsyncFilesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FileListResponse:
+    ) -> AsyncPaginator[FileListResponse, AsyncPagePagination[FileListResponse]]:
         """
         List/search files with pagination, filtering, and sorting.
 
@@ -292,14 +294,15 @@ class AsyncFilesResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._get(
+        return self._get_api_list(
             "/api/v1/files",
+            page=AsyncPagePagination[FileListResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform(
+                query=maybe_transform(
                     {
                         "folder_no": folder_no,
                         "limit": limit,
@@ -310,7 +313,7 @@ class AsyncFilesResource(AsyncAPIResource):
                     file_list_params.FileListParams,
                 ),
             ),
-            cast_to=FileListResponse,
+            model=FileListResponse,
         )
 
     async def delete(
