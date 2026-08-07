@@ -9,7 +9,7 @@ and offers both synchronous and asynchronous clients powered by [httpx](https://
 
 ## Documentation
 
-The REST API documentation can be found on [autorender.mintlify.app](https://autorender.mintlify.app/). The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [autorender.io](https://autorender.io/docs). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
@@ -30,10 +30,10 @@ client = Autorender(
     api_key=os.environ.get("AUTORENDER_API_KEY"),  # This is the default and can be omitted
 )
 
-files = client.files.list(
+page = client.files.list(
     limit=10,
 )
-print(files.files)
+print(page.files)
 ```
 
 While you can provide an `api_key` keyword argument,
@@ -56,10 +56,10 @@ client = AsyncAutorender(
 
 
 async def main() -> None:
-    files = await client.files.list(
+    page = await client.files.list(
         limit=10,
     )
-    print(files.files)
+    print(page.files)
 
 
 asyncio.run(main())
@@ -92,10 +92,10 @@ async def main() -> None:
         api_key=os.environ.get("AUTORENDER_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
-        files = await client.files.list(
+        page = await client.files.list(
             limit=10,
         )
-        print(files.files)
+        print(page.files)
 
 
 asyncio.run(main())
@@ -109,6 +109,69 @@ Nested request parameters are [TypedDicts](https://docs.python.org/3/library/typ
 - Converting to a dictionary, `model.to_dict()`
 
 Typed requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.
+
+## Pagination
+
+List methods in the Autorender API are paginated.
+
+This library provides auto-paginating iterators with each list response, so you do not have to request successive pages manually:
+
+```python
+from autorender import Autorender
+
+client = Autorender()
+
+all_files = []
+# Automatically fetches more pages as needed.
+for file in client.files.list():
+    # Do something with file here
+    all_files.append(file)
+print(all_files)
+```
+
+Or, asynchronously:
+
+```python
+import asyncio
+from autorender import AsyncAutorender
+
+client = AsyncAutorender()
+
+
+async def main() -> None:
+    all_files = []
+    # Iterate through items across all pages, issuing requests as needed.
+    async for file in client.files.list():
+        all_files.append(file)
+    print(all_files)
+
+
+asyncio.run(main())
+```
+
+Alternatively, you can use the `.has_next_page()`, `.next_page_info()`, or `.get_next_page()` methods for more granular control working with pages:
+
+```python
+first_page = await client.files.list()
+if first_page.has_next_page():
+    print(f"will fetch next page using these details: {first_page.next_page_info()}")
+    next_page = await first_page.get_next_page()
+    print(f"number of items we just fetched: {len(next_page.files)}")
+
+# Remove `await` for non-async usage.
+```
+
+Or just work directly with the returned data:
+
+```python
+first_page = await client.files.list()
+
+print(f"page number: {first_page.meta.page}")  # => "page number: 1"
+for file in first_page.files:
+    print(file.id)
+
+# Remove `await` for non-async usage.
+```
 
 ## File uploads
 
